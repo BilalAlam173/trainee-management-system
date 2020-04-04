@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
-} from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { Login } from "./components/login/login";
 
 import { BatchList } from "./components/batch-list/batch-list";
@@ -21,7 +16,26 @@ import { Dashboard } from "./components/dashboard/dashboard";
 // making sure things like the back button and bookmarks
 // work properly.
 
-export default function BasicExample() {
+export default function App() {
+  function authProtectedDashborad() {
+    if (localStorage.getItem("token")) {
+      window.history.pushState({}, "", "/dashboard");
+      return <Dashboard />;
+    } else {
+      window.history.pushState({}, "", "/login");
+      return <Login />;
+    }
+  }
+
+  function login() {
+    if (localStorage.getItem("token")) {
+      window.history.pushState({}, "", "/dashboard");
+      return <Dashboard />;
+    } else {
+      window.history.pushState({}, "", "/login");
+      return <Login />;
+    }
+  }
   return (
     <Router>
       <div>
@@ -36,12 +50,11 @@ export default function BasicExample() {
           <Route exact path="/">
             <Login />
           </Route>
-          <Route path="/dashboard">
-            <Dashboard />
-          </Route>
+          <Route exact path="/login" component={login} />
+
+          <Route path="/dashboard" component={authProtectedDashborad} />
         </Switch>
       </div>
     </Router>
   );
 }
-
