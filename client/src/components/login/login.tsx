@@ -55,35 +55,36 @@ const useStyles = makeStyles((theme) => ({
 
 export function Login() {
   const classes = useStyles();
-  const state: Credential = {
+  const initState: Credential = {
     username: "",
     password: "",
     role: USER_ROLES.ADMIN,
   };
-  const [value, setValue] = React.useState(state);
+  const [state, setState] = React.useState(initState);
   const history = useHistory();
 
   const handleRoleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const target = event.target as HTMLInputElement;
-    state.role = Number(target.value);
-    setValue(state);
+    setState({ ...state, role: Number(target.value) });
   };
   const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const target = event.target as HTMLInputElement;
     state.username = target.value;
-    setValue(state);
+    setState({ ...state, username: target.value });
   };
   const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const target = event.target as HTMLInputElement;
-    state.password = target.value;
-    setValue(state);
+    setState({ ...state, password: target.value });
   };
 
   const submit = () => {
     try {
+      console.log(state);
       const token = LoginService.submitLogin(state);
       if (token) {
         localStorage.setItem("token", token);
+        localStorage.setItem("username", state.username);
+        localStorage.setItem("role", JSON.stringify(state.role));
         history.push("/dashboard");
       }
     } catch (e) {
@@ -108,7 +109,7 @@ export function Login() {
             required
             fullWidth
             id="username"
-            label="Username"
+            label="Username OR Pno"
             name="username"
             autoComplete="off"
             onChange={handleUsernameChange}

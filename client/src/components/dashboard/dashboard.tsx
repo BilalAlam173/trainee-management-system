@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import clsx from "clsx";
 import {
   BrowserRouter as Router,
@@ -33,100 +33,57 @@ import MailIcon from "@material-ui/icons/Mail";
 import { About } from "../about/about";
 import { TraineeList } from "../trainee-list/trainee-list";
 import { BatchList } from "../batch-list/batch-list";
-import HomeIcon from "@material-ui/icons/Home";
-import PersonIcon from "@material-ui/icons/Person";
-import GroupIcon from "@material-ui/icons/Group";
-import { useHistory } from "react-router-dom";
+import { LeaveRequest } from "../leave-request/leave-request";
+import { Event } from "../event/event";
+import { useHistory, useLocation } from "react-router-dom";
+import { dashboardStyle } from "./dashboard.css";
+import Badge from "@material-ui/core/Badge";
+import NotificationsIcon from "@material-ui/icons/Notifications";
+import AccountBoxIcon from "@material-ui/icons/AccountBox";
+import PowerSettingsNewIcon from "@material-ui/icons/PowerSettingsNew";
 
-const drawerWidth = 240;
+import { MenuItem, DashboardService } from "./dashboard.service";
+import { USER_ROLES } from "../../globals";
+import { Announcement } from "../announcement/announcement";
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      display: "flex",
-    },
-    appBar: {
-      zIndex: theme.zIndex.drawer + 1,
-      transition: theme.transitions.create(["width", "margin"], {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-      }),
-    },
-    appBarShift: {
-      marginLeft: drawerWidth,
-      width: `calc(100% - ${drawerWidth}px)`,
-      transition: theme.transitions.create(["width", "margin"], {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-    },
-    menuButton: {
-      marginRight: 36,
-    },
-    hide: {
-      display: "none",
-    },
-    drawer: {
-      width: drawerWidth,
-      flexShrink: 0,
-      whiteSpace: "nowrap",
-    },
-    drawerOpen: {
-      width: drawerWidth,
-      transition: theme.transitions.create("width", {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-    },
-    drawerClose: {
-      transition: theme.transitions.create("width", {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-      }),
-      overflowX: "hidden",
-      width: theme.spacing(7) + 1,
-      [theme.breakpoints.up("sm")]: {
-        width: theme.spacing(9) + 1,
-      },
-    },
-    toolbar: {
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "flex-end",
-      padding: theme.spacing(0, 1),
-      ...theme.mixins.toolbar,
-    },
-    content: {
-      flexGrow: 1,
-      padding: theme.spacing(3),
-    },
-    logoutBtn: {
-      position: "absolute",
-      right: 10,
-    },
-  })
-);
+const useStyles = dashboardStyle;
+const service = DashboardService;
 
-const menuItems: { text: string; route: string; icon: any }[] = [
-  { text: "About", route: "/about", icon: <HomeIcon /> },
-  { text: "Trainees", route: "/trainee-list", icon: <PersonIcon /> },
-  { text: "Batches", route: "/batch-list", icon: <GroupIcon /> },
-];
+const setMenu = (role: USER_ROLES) => {
+  service.currentMenu =
+    role == USER_ROLES.APPOINTMENT_HOLDER
+      ? service.appointmentHolderMenu
+      : service.adminMenu;
+};
 
 export function Dashboard() {
   const classes = useStyles();
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
-  let { path, url } = useRouteMatch();
+  const initState = {
+    menuOpened: true,
+    notiOpened: false,
+    username: "test",
+  };
+  const [state, setState] = React.useState(initState);
+  const { path, url } = useRouteMatch();
+  const location = useLocation();
+  setMenu(Number(localStorage.getItem("role")));
+
+  useEffect(() => {
+    if (location.pathname === "/dashboard") {
+      setMenu(Number(localStorage.getItem("role")));
+      setState({ ...state, username: localStorage.getItem("username") || "" });
+      console.log("currentMenu", service.currentMenu);
+    }
+  }, [location]);
 
   const history = useHistory();
 
-  const handleDrawerOpen = () => {
-    setOpen(true);
+  const handleDrawer = () => {
+    setState({ ...state, menuOpened: !state.menuOpened });
   };
-
-  const handleDrawerClose = () => {
-    setOpen(false);
+  const handleNoti = () => {
+    setState({ ...state, notiOpened: !state.notiOpened });
   };
 
   const logout = () => {
@@ -134,23 +91,24 @@ export function Dashboard() {
     history.push("/login");
   };
 
+  console.log("render", service.currentMenu.length);
   return (
     <div className={classes.root}>
       <CssBaseline />
       <AppBar
         position="fixed"
         className={clsx(classes.appBar, {
-          [classes.appBarShift]: open,
+          [classes.appBarShift]: state.menuOpened,
         })}
       >
         <Toolbar>
           <IconButton
             color="inherit"
             aria-label="open drawer"
-            onClick={handleDrawerOpen}
+            onClick={handleDrawer}
             edge="start"
             className={clsx(classes.menuButton, {
-              [classes.hide]: open,
+              [classes.hide]: state.menuOpened,
             })}
           >
             <MenuIcon />
@@ -158,30 +116,46 @@ export function Dashboard() {
           <Typography variant="h6" noWrap>
             PNS Jauhar Trainee Management System
           </Typography>
-          <Button
-            variant="contained"
+          <IconButton
+            color="inherit"
+            className={classes.notiBtn}
+            onClick={handleNoti}
+          >
+            <Badge badgeContent={4} color="secondary">
+              <NotificationsIcon />
+            </Badge>
+          </IconButton>
+          <IconButton color="inherit" className={classes.profileBtn}>
+            <AccountBoxIcon />
+          </IconButton>
+          <IconButton
+            color="inherit"
             className={classes.logoutBtn}
             onClick={logout}
           >
-            Logout
-          </Button>
+            <PowerSettingsNewIcon />
+          </IconButton>
         </Toolbar>
       </AppBar>
       <Drawer
+        anchor="left"
         variant="permanent"
         className={clsx(classes.drawer, {
-          [classes.drawerOpen]: open,
-          [classes.drawerClose]: !open,
+          [classes.drawerOpen]: state.menuOpened,
+          [classes.drawerClose]: !state.menuOpened,
         })}
         classes={{
           paper: clsx({
-            [classes.drawerOpen]: open,
-            [classes.drawerClose]: !open,
+            [classes.drawerOpen]: state.menuOpened,
+            [classes.drawerClose]: !state.menuOpened,
           }),
         }}
       >
         <div className={classes.toolbar}>
-          <IconButton onClick={handleDrawerClose}>
+          <Typography variant="h6" noWrap align="left">
+            {state.username}
+          </Typography>
+          <IconButton onClick={handleDrawer}>
             {theme.direction === "rtl" ? (
               <ChevronRightIcon />
             ) : (
@@ -191,10 +165,10 @@ export function Dashboard() {
         </div>
         <Divider />
         <List>
-          {menuItems.map((item, index) => (
-            <Link to={url + item.route}>
+          {service.currentMenu.map((item, index) => (
+            <Link to={url + item.route} className={classes.navText}>
               <ListItem button key={item.text}>
-                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemIcon>{<item.icon />}</ListItemIcon>
                 <ListItemText primary={item.text}></ListItemText>
               </ListItem>
             </Link>
@@ -206,6 +180,27 @@ export function Dashboard() {
         <div className={classes.toolbar} />
         <RouteContainer />
       </main>
+      <Divider />
+      <Drawer
+        anchor="right"
+        open={state.notiOpened}
+        onClose={handleNoti}
+        className={classes.notiOpen}
+        // className={clsx(classes.drawer, {
+        //   [classes.notiOpen]: state.notiOpened,
+        //   [classes.notiClose]: !state.notiOpened,
+        // })}
+        // classes={{
+        //   paper: clsx({
+        //     [classes.notiOpen]: state.notiOpened,
+        //     [classes.notiClose]: !state.notiOpened,
+        //   }),
+        // }}
+      >
+        <div className={classes.notiOpen}>
+          <Announcement />
+        </div>
+      </Drawer>
     </div>
   );
 }
@@ -224,6 +219,12 @@ function RouteContainer() {
       </Route>
       <Route path="/dashboard/batch-list">
         <BatchList />
+      </Route>
+      <Route path="/dashboard/leave-request">
+        <LeaveRequest />
+      </Route>
+      <Route path="/dashboard/event">
+        <Event />
       </Route>
     </Switch>
   );

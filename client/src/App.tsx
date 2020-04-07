@@ -52,7 +52,11 @@ export default function App() {
           </Route>
           <Route exact path="/login" component={login} />
 
-          <Route path="/dashboard" component={authProtectedDashborad} />
+          <Route
+            path="/dashboard"
+            onChange={(e: any) => console.log(e)}
+            component={authProtectedDashborad}
+          />
         </Switch>
       </div>
     </Router>

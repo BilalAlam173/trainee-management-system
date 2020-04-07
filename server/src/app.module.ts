@@ -1,15 +1,19 @@
-import { Module } from '@nestjs/common';
+import { Module, MiddlewareConsumer } from '@nestjs/common';
 import { AppService } from './services/app.service';
 import { MongooseModule } from '@nestjs/mongoose';
-import { AdminModule } from './modules/admin/admin.module';
-
+import { UserModule } from './modules/user/user.module';
+import { AuthMiddleware } from './middlewares/auth.middleware';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://bilal:test123@ds241298.mlab.com:41298/tms'),
-    AdminModule
+    MongooseModule.forRoot('mongodb://localhost:27017/tms'),
+    UserModule,
   ],
   controllers: [],
   providers: [],
 })
-export class AppModule { }
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(AuthMiddleware);
+  }
+}
