@@ -106,42 +106,6 @@ export function LeaveRequest() {
                   </TabPanel>
                 );
               })}
-          {}
-          {/* <TabPanel value={state.parentTab} index={0}>
-            {state.childTab !== 4 ? (
-              <LeaveRequestList status={state.childTab} />
-            ) : (
-              <AddRequest tab={state.parentTab} />
-            )}
-          </TabPanel>
-          <TabPanel value={state.parentTab} index={1}>
-            {state.childTab !== 4 ? (
-              <LeaveRequestList status={state.childTab} />
-            ) : (
-              <AddRequest tab={state.parentTab} />
-            )}
-          </TabPanel>
-          <TabPanel value={state.parentTab} index={2}>
-            {state.childTab !== 4 ? (
-              <LeaveRequestList status={state.childTab} />
-            ) : (
-              <AddRequest tab={state.parentTab} />
-            )}
-          </TabPanel>
-          <TabPanel value={state.parentTab} index={3}>
-            {state.childTab !== 4 ? (
-              <LeaveRequestList status={state.childTab} />
-            ) : (
-              <AddRequest tab={state.parentTab} />
-            )}
-          </TabPanel>
-          <TabPanel value={state.parentTab} index={4}>
-            {state.childTab !== 4 ? (
-              <LeaveRequestList status={state.childTab} />
-            ) : (
-              <AddRequest tab={state.parentTab} />
-            )}
-          </TabPanel> */}
         </div>
       </div>
     </div>

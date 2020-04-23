@@ -19,7 +19,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import AddIcon from "@material-ui/icons/Add";
 import SearchIcon from "@material-ui/icons/Search";
 import MoreIcon from "@material-ui/icons/MoreVert";
-import { USER_ROLES } from "../../globals";
+import { USER_ROLES, isAdmin } from "../../globals";
 import LocalHospitalIcon from "@material-ui/icons/LocalHospital";
 import SupervisorAccountIcon from "@material-ui/icons/SupervisorAccount";
 import TextField from "@material-ui/core/TextField";
@@ -88,14 +88,16 @@ export function Announcement() {
                 </Fab>
               </div>
             ) : (
-              <Fab
-                color="secondary"
-                aria-label="add"
-                className={classes.fabButton}
-                onClick={showAddForm}
-              >
-                <AddIcon />
-              </Fab>
+              isAdmin() && (
+                <Fab
+                  color="secondary"
+                  aria-label="add"
+                  className={classes.fabButton}
+                  onClick={showAddForm}
+                >
+                  <AddIcon />
+                </Fab>
+              )
             )}
             <div className={classes.grow} />
           </Toolbar>

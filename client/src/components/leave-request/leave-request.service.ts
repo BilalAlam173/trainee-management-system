@@ -163,7 +163,7 @@ class _leaveRequestService {
     {
       pno: "6850",
       rank: "S/lt",
-      name: "Daniyal Kazim",
+      name: "S Kazim",
       batch: "MIS-2",
       division: "Alpha",
       mobile: "034512356478",
