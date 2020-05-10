@@ -18,6 +18,7 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import List from "@material-ui/core/List";
 import CssBaseline from "@material-ui/core/CssBaseline";
+import Alert from "@material-ui/lab/Alert";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
@@ -34,7 +35,7 @@ import { About } from "../about/about";
 import { TraineeList } from "../trainee-list/trainee-list";
 import { BatchList } from "../batch-list/batch-list";
 import { LeaveRequest } from "../leave-request/leave-request";
-import { Event } from "../event/event";
+import { EventPage } from "../event/event";
 import { useHistory, useLocation } from "react-router-dom";
 import { dashboardStyle } from "./dashboard.css";
 import Badge from "@material-ui/core/Badge";
@@ -43,8 +44,9 @@ import AccountBoxIcon from "@material-ui/icons/AccountBox";
 import PowerSettingsNewIcon from "@material-ui/icons/PowerSettingsNew";
 
 import { MenuItem, DashboardService } from "./dashboard.service";
-import { USER_ROLES } from "../../globals";
+import { USER_ROLES, currentUser, isTrainee } from "../../globals";
 import { Announcement } from "../announcement/announcement";
+import { Profile } from "../profile/profile";
 
 const useStyles = dashboardStyle;
 const service = DashboardService;
@@ -67,12 +69,12 @@ export function Dashboard() {
   const [state, setState] = React.useState(initState);
   const { path, url } = useRouteMatch();
   const location = useLocation();
-  setMenu(Number(localStorage.getItem("role")));
+  setMenu(currentUser()?.role || USER_ROLES.ADMIN);
 
   useEffect(() => {
     if (location.pathname === "/dashboard") {
-      setMenu(Number(localStorage.getItem("role")));
-      setState({ ...state, username: localStorage.getItem("username") || "" });
+      setMenu(currentUser()?.role || USER_ROLES.ADMIN);
+      setState({ ...state, username: currentUser()?.name || "" });
       console.log("currentMenu", service.currentMenu);
     }
   }, [location]);
@@ -125,9 +127,15 @@ export function Dashboard() {
               <NotificationsIcon />
             </Badge>
           </IconButton>
-          <IconButton color="inherit" className={classes.profileBtn}>
-            <AccountBoxIcon />
-          </IconButton>
+
+          {isTrainee() && (
+            <IconButton color="inherit" className={classes.profileBtn}>
+              <Link to="/dashboard/profile" className={classes.navTextWhite}>
+                <AccountBoxIcon />
+              </Link>
+            </IconButton>
+          )}
+
           <IconButton
             color="inherit"
             className={classes.logoutBtn}
@@ -179,6 +187,20 @@ export function Dashboard() {
       <main className={classes.content}>
         <div className={classes.toolbar} />
         <RouteContainer />
+        {/* <div className={classes.root}>
+          <Alert severity="error" variant="filled">
+            This is an error alert — check it out!
+          </Alert>
+          <Alert severity="warning" variant="filled">
+            This is a warning alert — check it out!
+          </Alert>
+          <Alert severity="info" variant="filled">
+            This is an info alert — check it out!
+          </Alert>
+          <Alert severity="success" variant="filled">
+            This is a success alert — check it out!
+          </Alert>
+        </div> */}
       </main>
       <Divider />
       <Drawer
@@ -186,16 +208,6 @@ export function Dashboard() {
         open={state.notiOpened}
         onClose={handleNoti}
         className={classes.notiOpen}
-        // className={clsx(classes.drawer, {
-        //   [classes.notiOpen]: state.notiOpened,
-        //   [classes.notiClose]: !state.notiOpened,
-        // })}
-        // classes={{
-        //   paper: clsx({
-        //     [classes.notiOpen]: state.notiOpened,
-        //     [classes.notiClose]: !state.notiOpened,
-        //   }),
-        // }}
       >
         <div className={classes.notiOpen}>
           <Announcement />
@@ -224,7 +236,10 @@ function RouteContainer() {
         <LeaveRequest />
       </Route>
       <Route path="/dashboard/event">
-        <Event />
+        <EventPage />
+      </Route>
+      <Route path="/dashboard/profile">
+        <Profile />
       </Route>
     </Switch>
   );

@@ -19,7 +19,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import AddIcon from "@material-ui/icons/Add";
 import SearchIcon from "@material-ui/icons/Search";
 import MoreIcon from "@material-ui/icons/MoreVert";
-import { USER_ROLES, isAdmin } from "../../globals";
+import { USER_ROLES, isAdmin, currentUser } from "../../globals";
 import LocalHospitalIcon from "@material-ui/icons/LocalHospital";
 import SupervisorAccountIcon from "@material-ui/icons/SupervisorAccount";
 import TextField from "@material-ui/core/TextField";
@@ -52,7 +52,7 @@ export function Announcement() {
     service.data.unshift({
       ...state.newAnnouncement,
       id: String(service.data.length + 1),
-      creator: Number(localStorage.getItem("role")),
+      creator: currentUser()?.role || USER_ROLES.ADMIN,
       dateTime: new Date(),
     });
     setState({ ...state, data: service.data });
@@ -110,7 +110,7 @@ export function Announcement() {
                 <Grid container spacing={3}>
                   <Grid item xs={12} sm={3}>
                     <ListItemAvatar>
-                      {Number(localStorage.getItem("role")) ==
+                      {currentUser()?.role ==
                       USER_ROLES.ADMIN ? (
                         <Avatar className={classes.green}>
                           <SupervisorAccountIcon />

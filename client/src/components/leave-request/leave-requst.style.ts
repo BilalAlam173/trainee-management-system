@@ -20,7 +20,7 @@ export const leaveRequestStyles = makeStyles((theme: Theme) =>
     },
     childTab: {
       //   width: "100%",
-      height: 150,
+      height: 90,
     },
     childTabContent: {
       width: "100%",

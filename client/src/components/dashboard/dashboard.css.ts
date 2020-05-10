@@ -101,5 +101,9 @@ export const dashboardStyle = makeStyles((theme: Theme) =>
       textDecoration: "none",
       color: "black",
     },
+    navTextWhite: {
+      textDecoration: "none",
+      color: "white",
+    },
   })
 );

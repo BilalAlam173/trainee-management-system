@@ -17,5 +17,23 @@ export const requestListStyles = makeStyles((theme: Theme) =>
     dividerInset: {
       margin: `5px 0 0 ${theme.spacing(9)}px`,
     },
+    actions: {
+      textAlign: "center",
+      marginTop: "30px",
+    },
+    actionBtns: {
+      marginRight: "10px",
+    },
+    statusBar: {
+      position: "absolute",
+      right: "10%",
+    },
+    paper: {
+      width: "100%",
+      height: "600px",
+    },
+    halfWidth: {
+      width: "50%",
+    },
   })
 );

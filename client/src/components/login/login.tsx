@@ -19,6 +19,8 @@ import RadioGroup from "@material-ui/core/RadioGroup";
 import { Credential, LoginService } from "./login.service";
 import { USER_ROLES } from "../../globals";
 import { useHistory } from "react-router-dom";
+import { getTrainee } from "../../services/data.service";
+import { loginStyles } from "./login.style";
 
 function Copyright() {
   return (
@@ -33,28 +35,8 @@ function Copyright() {
   );
 }
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}));
-
 export function Login() {
-  const classes = useStyles();
+  const classes = loginStyles();
   const initState: Credential = {
     username: "",
     password: "",
@@ -82,9 +64,12 @@ export function Login() {
       console.log(state);
       const token = LoginService.submitLogin(state);
       if (token) {
+        const user = { ...getTrainee(state.username), role: state.role } || {
+          username: state.username,
+          role: JSON.stringify(state.role),
+        };
         localStorage.setItem("token", token);
-        localStorage.setItem("username", state.username);
-        localStorage.setItem("role", JSON.stringify(state.role));
+        localStorage.setItem("user", JSON.stringify(user));
         history.push("/dashboard");
       }
     } catch (e) {
@@ -93,7 +78,7 @@ export function Login() {
   };
 
   return (
-    <Container component="main" maxWidth="sm">
+    <Container component="main" maxWidth="sm" className={classes.root}>
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>

@@ -1,0 +1,234 @@
+import React, { useState } from "react";
+import { requestListStyles } from "../../request-list/request-list.style";
+import Paper from "@material-ui/core/Paper";
+import Typography from "@material-ui/core/Typography";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
+import Divider from "@material-ui/core/Divider";
+import TextField from "@material-ui/core/TextField";
+import { getTrainee } from "../../../../services/data.service";
+import { currentUser, STATUS, REQUEST_TYPE } from "../../../../globals";
+import { LeaveRequest, LeaveRequestService } from "../../leave-request.service";
+import {
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker,
+} from "@material-ui/pickers";
+import DateFnsUtils from "@date-io/date-fns";
+import Button from "@material-ui/core/Button";
+
+export function LeaveRequestForm(props: any) {
+  const { tab } = props;
+  const service = LeaveRequestService;
+  const data: LeaveRequest = {
+    ...currentUser(),
+    ...{
+      pno: currentUser()?.pno,
+      leaveAmount: 0,
+      wef: new Date(),
+      leavesAvailed: 0,
+      reason: "",
+      address: "",
+      date: new Date(),
+      status: STATUS.PENDING,
+    },
+  };
+
+  const [state, setState] = useState({
+    data,
+  });
+  const classes = requestListStyles();
+
+  const submit = (_e: any) => {
+    if (tab == REQUEST_TYPE.OUTSTATION) {
+      service.outstationRequests.push(state.data);
+    } else {
+      service.casualRequests.push(state.data);
+    }
+    service.buildMaps();
+    setState({ data });
+  };
+
+  return (
+    <div>
+      <Typography variant="h5" component="h2" align="center">
+        {tab === REQUEST_TYPE.CASUAL ? "CASUAL" : "OUTSTATION"} LEAVE REQUEST
+        PERFORMAE STUDENT OFFICERS
+      </Typography>
+      <br />
+      <Paper elevation={0} variant="outlined" className={classes.paper}>
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <List className={classes.root}>
+            <li>
+              <Typography
+                className={classes.dividerFullWidth}
+                display="block"
+                variant="caption"
+                align="center"
+              >
+                Personal Details
+              </Typography>
+            </li>
+            <Divider component="li" />
+
+            <ListItem>
+              <ListItemText primary={state.data.rank} secondary={"Rank"} />
+              <ListItemText primary={state.data.name} secondary={"Name "} />
+              <ListItemText primary={state.data.pno} secondary={"Pno"} />
+            </ListItem>
+            <ListItem>
+              <ListItemText primary={state.data.batch} secondary={"Batch "} />
+              <ListItemText
+                primary={state.data.division}
+                secondary={"Division"}
+              />
+              <ListItemText
+                primary={state.data.mobile}
+                secondary={"Mobile No"}
+              />
+            </ListItem>
+
+            <li>
+              <Typography
+                className={classes.dividerFullWidth}
+                display="block"
+                variant="caption"
+                align="center"
+              >
+                Request Details
+              </Typography>
+            </li>
+            <Divider component="li" />
+            <ListItem>
+              <TextField
+                label="Leaves Requested"
+                multiline
+                value={state.data.leaveAmount}
+                className={classes.itemContent}
+                type="number"
+                onChange={(e) =>
+                  setState({
+                    data: {
+                      ...state.data,
+                      leaveAmount: isNaN(Number(e.target.value))
+                        ? 0
+                        : Number(e.target.value),
+                    },
+                  })
+                }
+              />
+              <TextField
+                label="Leaves Availed"
+                multiline
+                value={state.data.leavesAvailed}
+                className={classes.itemContent}
+                type="number"
+                onChange={(e) =>
+                  setState({
+                    data: {
+                      ...state.data,
+                      leavesAvailed: isNaN(Number(e.target.value))
+                        ? 0
+                        : Number(e.target.value),
+                    },
+                  })
+                }
+              />
+            </ListItem>
+            <ListItem>
+              <TextField
+                label="Reason"
+                multiline
+                value={state.data.reason}
+                className={classes.itemContent}
+                type="number"
+                onChange={(e) =>
+                  setState({
+                    data: {
+                      ...state.data,
+                      reason: e.target.value,
+                    },
+                  })
+                }
+              />
+            </ListItem>
+
+            <ListItem>
+              <TextField
+                label="Address"
+                multiline
+                value={state.data.address}
+                className={classes.itemContent}
+                type="number"
+                onChange={(e) =>
+                  setState({
+                    data: {
+                      ...state.data,
+                      address: e.target.value,
+                    },
+                  })
+                }
+              />
+            </ListItem>
+            <ListItem>
+              <KeyboardDatePicker
+                disableToolbar
+                variant="inline"
+                format="MM/dd/yyyy"
+                margin="dense"
+                id="date-picker-inline"
+                label="With effective from"
+                value={state.data.wef}
+                className={classes.halfWidth}
+                onChange={(date) => {
+                  setState({
+                    data: {
+                      ...state.data,
+                      wef: date ? new Date(date) : new Date(),
+                    },
+                  });
+                }}
+                KeyboardButtonProps={{
+                  "aria-label": "change date",
+                }}
+              />
+              <KeyboardDatePicker
+                disableToolbar
+                variant="inline"
+                format="MM/dd/yyyy"
+                margin="dense"
+                id="date-picker-inline"
+                label="Date"
+                className={classes.halfWidth}
+                value={state.data.date}
+                onChange={(date) => {
+                  setState({
+                    data: {
+                      ...state.data,
+                      date: date ? new Date(date) : new Date(),
+                    },
+                  });
+                }}
+                KeyboardButtonProps={{
+                  "aria-label": "change date",
+                }}
+              />
+            </ListItem>
+            <Divider component="li" />
+          </List>
+          <div className={classes.actions}>
+            <Button
+              variant="contained"
+              className={classes.actionBtns}
+              color="primary"
+              disabled={state.data.status !== STATUS.PENDING}
+              onClick={submit}
+            >
+              Submit
+            </Button>
+          </div>
+        </MuiPickersUtilsProvider>
+      </Paper>
+    </div>
+  );
+}

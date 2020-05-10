@@ -1,3 +1,5 @@
+import { Trainee } from "./services/data.service";
+
 export enum USER_ROLES {
   ADMIN,
   MEDICAL_ADMIN,
@@ -17,27 +19,46 @@ export enum STATUS {
   APPROVED,
   DECLINED,
   PENDING,
+  ALL,
+  ADD,
 }
 
 export enum ADMIN_TYPES {
   COURSE_OFFICER,
   JOTO,
+  AJOTO,
   DEAN,
   CAPTAIN_TRAINING,
   DPTY_COMMANDANT,
+  MEDICAL,
 }
 
 export const isAdmin = () => {
-  const role = Number(localStorage.getItem("role"));
+  const role = currentUser()?.role;
   return role == USER_ROLES.ADMIN || role == USER_ROLES.MEDICAL_ADMIN;
 };
+export const isSuperOfficer = () => {
+  const role = currentUser()?.role;
+  return role == USER_ROLES.ADMIN || role == USER_ROLES.APPOINTMENT_HOLDER;
+};
+export const isTrainee = () => {
+  const role = currentUser()?.role;
+  return role == USER_ROLES.TRAINEE;
+};
 export const isSuperAdmin = () => {
-  const role = Number(localStorage.getItem("role"));
+  const role = currentUser()?.role;
   return role == USER_ROLES.ADMIN;
 };
 export const isMedicalAdmin = () => {
-  const role = Number(localStorage.getItem("role"));
+  const role = currentUser()?.role;
   return role == USER_ROLES.MEDICAL_ADMIN;
+};
+export const currentUser = (): Trainee | null => {
+  try {
+    return JSON.parse(localStorage.getItem("user") || "") || null;
+  } catch (e) {
+    return null;
+  }
 };
 
 export const getPrimaryTabText = (tab: REQUEST_TYPE): string => {
@@ -63,12 +84,18 @@ export const getSecondaryTabText = (tab: STATUS | ADMIN_TYPES): string => {
         return "Course Officer";
       case ADMIN_TYPES.JOTO:
         return "JOTO";
+      case ADMIN_TYPES.AJOTO:
+        return "Assistant JOTO";
       case ADMIN_TYPES.DEAN:
         return "Dean";
       case ADMIN_TYPES.CAPTAIN_TRAINING:
         return "Captain Training";
       case ADMIN_TYPES.DPTY_COMMANDANT:
         return "Deputy Commandant";
+      case ADMIN_TYPES.MEDICAL:
+        return "Medical Officer";
+      default:
+        return "All";
     }
   } else if (!isAdmin()) {
     switch (tab) {

@@ -9,7 +9,7 @@ import AddIcon from "@material-ui/icons/Add";
 
 import { AddRequest } from "./add-request/add-request";
 import { LeaveRequestList } from "./request-list/request-list";
-import { USER_ROLES } from "../../globals";
+import { USER_ROLES, isAdmin } from "../../globals";
 
 function TabPanel(props: any) {
   const { children, value, index, ...other } = props;
@@ -64,7 +64,7 @@ export function LeaveRequest() {
           onChange={handleChildChange}
           className={classes.childTabHeader}
         >
-          {Number(localStorage.getItem("role")) != USER_ROLES.ADMIN
+          {!isAdmin()
             ? [
                 <Tab label="Approved" className={classes.childTab} />,
                 <Tab label="Declined" className={classes.childTab} />,
@@ -75,19 +75,22 @@ export function LeaveRequest() {
             : [
                 <Tab label="Course Officer" className={classes.childTab} />,
                 <Tab label="JOTO" className={classes.childTab} />,
+                <Tab label="Assistant JOTO" className={classes.childTab} />,
                 <Tab label="Dean" className={classes.childTab} />,
                 <Tab label="Captain Training" className={classes.childTab} />,
                 <Tab label="Deputy Commandant" className={classes.childTab} />,
+                <Tab label="Medical Officer" className={classes.childTab} />,
+                <Tab label="All" className={classes.childTab} />,
               ]}
         </Tabs>
         <div className={classes.childTabContent}>
-          {Number(localStorage.getItem("role")) != USER_ROLES.ADMIN
+          {!isAdmin()
             ? service.tabs.map((item, idx) => {
                 return (
                   <TabPanel value={state.parentTab} index={idx}>
                     {state.childTab !== 4 ? (
                       <LeaveRequestList
-                        status={state.childTab}
+                        secondaryTab={state.childTab}
                         tab={state.parentTab}
                       />
                     ) : (
@@ -100,7 +103,7 @@ export function LeaveRequest() {
                 return (
                   <TabPanel value={state.parentTab} index={idx}>
                     <LeaveRequestList
-                      status={state.childTab}
+                      secondaryTab={state.childTab}
                       tab={state.parentTab}
                     />
                   </TabPanel>

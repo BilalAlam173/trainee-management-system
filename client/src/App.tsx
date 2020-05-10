@@ -6,6 +6,7 @@ import { BatchList } from "./components/batch-list/batch-list";
 import { TraineeList } from "./components/trainee-list/trainee-list";
 import { About } from "./components/about/about";
 import { Dashboard } from "./components/dashboard/dashboard";
+import bg2 from "./assets/bg.png";
 
 // This site has 3 pages, all of which are rendered
 // dynamically in the browser (not server rendered).
@@ -17,6 +18,12 @@ import { Dashboard } from "./components/dashboard/dashboard";
 // work properly.
 
 export default function App() {
+  document.body.style.backgroundImage = `url(${bg2})`;
+  document.body.style.objectFit = `contain`;
+  document.body.style.backgroundRepeat = `no-repeatƒ`;
+  document.body.style.backgroundSize = `cover`;
+  // document.body.style.backgroundColor = "red";
+
   function authProtectedDashborad() {
     if (localStorage.getItem("token")) {
       window.history.pushState({}, "", "/dashboard");
@@ -38,7 +45,13 @@ export default function App() {
   }
   return (
     <Router>
-      <div>
+      <div
+      // style={{
+      //   height: "100vh",
+      //   backgroundImage: "url('https://www.paknavy.gov.pk/rahbar/pop/2.jpg')",
+      //   objectFit: "cover",
+      // }}
+      >
         {/*
           A <Switch> looks through all its children <Route>
           elements and renders the first one whose path

@@ -1,5 +1,6 @@
 import { USER_ROLES } from "../../globals";
 import { TraineeService } from "../trainee-list/trainee-list.service";
+import { Trainee } from "../../services/data.service";
 
 export type Credential = {
   username: string;
@@ -16,6 +17,7 @@ export class LoginService {
       "cpt_training",
       "dpty_cmdt",
     ];
+    const trainee: Trainee = TraineeService.getTrainee(username);
 
     switch (role) {
       case USER_ROLES.ADMIN:
@@ -31,7 +33,7 @@ export class LoginService {
           return "passed";
         break;
       case USER_ROLES.TRAINEE:
-        if (TraineeService.getTrainee(username)) return "passed";
+        if (trainee && trainee.password == password) return "passed";
         break;
       default:
         throw new Error("Incorrect Credentials");

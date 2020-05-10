@@ -1,7 +1,8 @@
 import React from "react";
 import MaterialTable, { Column } from "material-table";
-import { TraineeService, Trainee } from "./trainee-list.service";
-import { USER_ROLES } from "../../globals";
+import { TraineeService } from "./trainee-list.service";
+import { USER_ROLES, currentUser } from "../../globals";
+import { Trainee } from "../../services/data.service";
 
 interface Row {
   name: string;
@@ -24,7 +25,7 @@ export function TraineeList() {
   });
 
   const isAllowed = () => {
-    const role = Number(localStorage.getItem("role"));
+    const role = currentUser()?.role;
     return role == USER_ROLES.ADMIN || role == USER_ROLES.MEDICAL_ADMIN;
   };
 
@@ -35,7 +36,7 @@ export function TraineeList() {
           setState((prevState) => {
             const data = [...prevState.data];
             data.push(newData);
-            service.data = data as Trainee[];
+            service.data = data as any[];
             return { ...prevState, data };
           });
           resolve();

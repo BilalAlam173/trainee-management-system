@@ -1,24 +1,7 @@
-import { Interface } from "readline";
+import { trainees, Trainee } from "../../services/data.service";
 
 class _traineeService {
-  data: Trainee[] = [
-    {
-      name: "Hamza Nazeer",
-      rank: "S/LT",
-      pno: 1234,
-      batch: "Mechanical Engineering Semester 1",
-      status: "available",
-      reason: "",
-    },
-    {
-      name: "Syed Daniyal Kazim",
-      rank: "S/LT",
-      pno: 54321,
-      batch: "Mechanical Engineering Semester 1",
-      status: "on sick leave",
-      reason: "Admitted to Shifa",
-    },
-  ];
+  data: any[] = trainees;
 
   columns = [
     { title: "PNo", field: "pno" },
@@ -36,15 +19,6 @@ class _traineeService {
   addTrainee(trainee: Trainee) {
     this.data.push(trainee);
   }
-}
-
-export interface Trainee {
-  name: string;
-  rank: string;
-  pno: any;
-  batch: string;
-  status: string;
-  reason: string;
 }
 
 export const TraineeService = new _traineeService();
