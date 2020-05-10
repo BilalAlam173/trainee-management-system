@@ -1,100 +1,116 @@
 export const getAllBatches = (): any[] => {
-    return [
-        {
-            img: 'https://www.paknavy.gov.pk/rahbar/pop/2.jpg',
-            title: 'Mechanical Engineering Semester 1',
-            count: 30,
-            available: 24
-        },
-        {
-            img: 'https://www.paknavy.gov.pk/rahbar/pop/2.jpg',
-            title: 'Mechanical Engineering Semester 2',
-            count: 35,
-            available: 24
-        },
-        {
-            img: 'https://www.paknavy.gov.pk/rahbar/pop/2.jpg',
-            title: 'Mechanical Engineering Semester 3',
-            count: 32,
-            available: 24
-        },
-        {
-            img: 'https://www.paknavy.gov.pk/rahbar/pop/2.jpg',
-            title: 'Mechanical Engineering Semester 4',
-            count: 31,
-            available: 24
-        },
-        {
-            img: 'https://www.paknavy.gov.pk/rahbar/pop/2.jpg',
-            title: 'Weapon Engineering Semester 1',
-            count: 36,
-            available: 24
-        },
-        {
-            img: 'https://www.paknavy.gov.pk/rahbar/pop/2.jpg',
-            title: 'Weapon Engineering Semester 2',
-            count: 37,
-            available: 24
-        },
-        {
-            img: 'https://www.paknavy.gov.pk/rahbar/pop/2.jpg',
-            title: 'Weapon Engineering Semester 3',
-            count: 37,
-            available: 24
-        },
-        {
-            img: 'https://www.paknavy.gov.pk/rahbar/pop/2.jpg',
-            title: 'Weapon Engineering Semester 4',
-            count: 37,
-            available: 24
-        },
-        {
-            img: 'https://www.paknavy.gov.pk/rahbar/pop/2.jpg',
-            title: 'Weapon Engineering Semester 5',
-            count: 37,
-            available: 24
-        },
-        {
-            img: 'https://www.paknavy.gov.pk/rahbar/pop/2.jpg',
-            title: 'Weapon Engineering Semester 6',
-            count: 37,
-            available: 24
-        },
-        {
-            img: 'https://www.paknavy.gov.pk/rahbar/pop/2.jpg',
-            title: 'MIS Semester 1',
-            count: 40,
-            available: 24
-        },
-        {
-            img: 'https://www.paknavy.gov.pk/rahbar/pop/2.jpg',
-            title: 'MIS Semester 2',
-            count: 30,
-            available: 24
-        },
-        {
-            img: 'https://www.paknavy.gov.pk/rahbar/pop/2.jpg',
-            title: 'MIS Semester 3',
-            count: 30,
-            available: 24
-        },
-        {
-            img: 'https://www.paknavy.gov.pk/rahbar/pop/2.jpg',
-            title: 'MIS Semester 4',
-            count: 30,
-            available: 24
-        },
-        {
-            img: 'https://www.paknavy.gov.pk/rahbar/pop/2.jpg',
-            title: 'MIS Semester 5',
-            count: 30,
-            available: 24
-        },
-        {
-            img: 'https://www.paknavy.gov.pk/rahbar/pop/2.jpg',
-            title: 'MIS Semester 6',
-            count: 30,
-            available: 24
-        },
-    ];
-}
+  return [
+    {
+      img: "https://www.paknavy.gov.pk/rahbar/pop/2.jpg",
+      title: "Mechanical Engineering Semester 1",
+      key: "ME-1",
+      count: 30,
+      available: 24,
+    },
+    {
+      img: "https://www.paknavy.gov.pk/rahbar/pop/2.jpg",
+      title: "Mechanical Engineering Semester 2",
+      count: 35,
+      key: "ME-2",
+      available: 24,
+    },
+    {
+      img: "https://www.paknavy.gov.pk/rahbar/pop/2.jpg",
+      title: "Mechanical Engineering Semester 3",
+      count: 32,
+      key: "ME-3",
+      available: 24,
+    },
+    {
+      img: "https://www.paknavy.gov.pk/rahbar/pop/2.jpg",
+      title: "Mechanical Engineering Semester 4",
+      count: 31,
+      key: "ME-4",
+      available: 24,
+    },
+    {
+      img: "https://www.paknavy.gov.pk/rahbar/pop/2.jpg",
+      title: "Weapon Engineering Semester 1",
+      key: "WE-1",
+      count: 36,
+      available: 24,
+    },
+    {
+      img: "https://www.paknavy.gov.pk/rahbar/pop/2.jpg",
+      title: "Weapon Engineering Semester 2",
+      key: "WE-2",
+      count: 37,
+      available: 24,
+    },
+    {
+      img: "https://www.paknavy.gov.pk/rahbar/pop/2.jpg",
+      title: "Weapon Engineering Semester 3",
+      key: "WE-3",
+      count: 37,
+      available: 24,
+    },
+    {
+      img: "https://www.paknavy.gov.pk/rahbar/pop/2.jpg",
+      title: "Weapon Engineering Semester 4",
+      key: "WE-4",
+      count: 37,
+      available: 24,
+    },
+    {
+      img: "https://www.paknavy.gov.pk/rahbar/pop/2.jpg",
+      title: "Weapon Engineering Semester 5",
+      key: "WE-5",
+      count: 37,
+      available: 24,
+    },
+    {
+      img: "https://www.paknavy.gov.pk/rahbar/pop/2.jpg",
+      title: "Weapon Engineering Semester 6",
+      key: "WE-6",
+      count: 37,
+      available: 24,
+    },
+    {
+      img: "https://www.paknavy.gov.pk/rahbar/pop/2.jpg",
+      title: "MIS Semester 1",
+      key: "MIS-1",
+      count: 40,
+      available: 24,
+    },
+    {
+      img: "https://www.paknavy.gov.pk/rahbar/pop/2.jpg",
+      title: "MIS Semester 2",
+      key: "MIS-2",
+      count: 30,
+      available: 24,
+    },
+    {
+      img: "https://www.paknavy.gov.pk/rahbar/pop/2.jpg",
+      title: "MIS Semester 3",
+      key: "MIS-3",
+      count: 30,
+      available: 24,
+    },
+    {
+      img: "https://www.paknavy.gov.pk/rahbar/pop/2.jpg",
+      title: "MIS Semester 4",
+      key: "MIS-4",
+      count: 30,
+      available: 24,
+    },
+    {
+      img: "https://www.paknavy.gov.pk/rahbar/pop/2.jpg",
+      title: "MIS Semester 5",
+      key: "MIS-5",
+      count: 30,
+      available: 24,
+    },
+    {
+      img: "https://www.paknavy.gov.pk/rahbar/pop/2.jpg",
+      title: "MIS Semester 6",
+      key: "MIS-6",
+      count: 30,
+      available: 24,
+    },
+  ];
+};

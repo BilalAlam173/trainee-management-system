@@ -7,9 +7,11 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Divider from "@material-ui/core/Divider";
 import TextField from "@material-ui/core/TextField";
-import { getTrainee } from "../../../../services/data.service";
 import { currentUser, STATUS, REQUEST_TYPE } from "../../../../globals";
 import { LeaveRequest, LeaveRequestService } from "../../leave-request.service";
+import "react-datepicker/dist/react-datepicker.css";
+import DatePicker from "react-datepicker";
+
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
@@ -56,8 +58,8 @@ export function LeaveRequestForm(props: any) {
         PERFORMAE STUDENT OFFICERS
       </Typography>
       <br />
-      <Paper elevation={0} variant="outlined" className={classes.paper}>
-        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+        <Paper elevation={0} variant="outlined" className={classes.paper}>
           <List className={classes.root}>
             <li>
               <Typography
@@ -171,11 +173,10 @@ export function LeaveRequestForm(props: any) {
               />
             </ListItem>
             <ListItem>
-              <KeyboardDatePicker
+              {/* <KeyboardDatePicker
                 disableToolbar
                 variant="inline"
                 format="MM/dd/yyyy"
-                margin="dense"
                 id="date-picker-inline"
                 label="With effective from"
                 value={state.data.wef}
@@ -191,12 +192,41 @@ export function LeaveRequestForm(props: any) {
                 KeyboardButtonProps={{
                   "aria-label": "change date",
                 }}
-              />
-              <KeyboardDatePicker
+              /> */}
+              <div className={classes.halfWidth}>
+                With effective from &nbsp;
+                <DatePicker
+                  selected={state.data.wef}
+                  onChange={(date) => {
+                    setState({
+                      data: {
+                        ...state.data,
+                        wef: date ? new Date(date) : new Date(),
+                      },
+                    });
+                  }}
+                />
+              </div>
+
+              <div className={classes.halfWidth}>
+              Date&nbsp;
+                <DatePicker
+                  selected={state.data.date}
+                  onChange={(date) => {
+                    setState({
+                      data: {
+                        ...state.data,
+                        date: date ? new Date(date) : new Date(),
+                      },
+                    });
+                  }}
+                />
+              </div>
+
+              {/* <KeyboardDatePicker
                 disableToolbar
                 variant="inline"
                 format="MM/dd/yyyy"
-                margin="dense"
                 id="date-picker-inline"
                 label="Date"
                 className={classes.halfWidth}
@@ -212,7 +242,7 @@ export function LeaveRequestForm(props: any) {
                 KeyboardButtonProps={{
                   "aria-label": "change date",
                 }}
-              />
+              /> */}
             </ListItem>
             <Divider component="li" />
           </List>
@@ -227,8 +257,8 @@ export function LeaveRequestForm(props: any) {
               Submit
             </Button>
           </div>
-        </MuiPickersUtilsProvider>
-      </Paper>
+        </Paper>
+      </MuiPickersUtilsProvider>
     </div>
   );
 }

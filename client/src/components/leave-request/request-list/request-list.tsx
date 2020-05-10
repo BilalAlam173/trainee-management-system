@@ -6,6 +6,7 @@ import {
   isAdmin,
   currentUser,
   STATUS,
+  isTrainee,
 } from "../../../globals";
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
@@ -73,51 +74,47 @@ export function LeaveRequestList(props: any) {
         {getPrimaryTabText(tab)} for {getSecondaryTabText(secondaryTab)}
       </h3>
       <div>
-        {secondaryTab != STATUS.ADD ? (
-          state.data.map((req: LeaveRequest) => {
-            switch (tab) {
-              case REQUEST_TYPE.OUTSTATION:
-              case REQUEST_TYPE.CASUAL:
-                return secondaryTab != STATUS.ADD ? (
-                  <LeaveRequestDoc
-                    data={req}
-                    onChange={(obj: any) => changeHandler(obj)}
-                    key={req.pno}
-                  />
-                ) : (
-                  <LeaveRequestForm />
-                );
-              case REQUEST_TYPE.NIGHT:
-              case REQUEST_TYPE.SHORT:
-                return secondaryTab != STATUS.ADD ? (
-                  <ShortRequestDoc
-                    data={req}
-                    onChange={(obj: any) => changeHandler(obj)}
-                  />
-                ) : (
-                  <ShortRequestForm />
-                );
-              case REQUEST_TYPE.SICK:
-                return secondaryTab != STATUS.ADD ? (
-                  <SickRequestDoc
-                    data={req}
-                    onChange={(obj: any) => changeHandler(obj)}
-                  />
-                ) : (
-                  <SickRequestForm />
-                );
-              default:
-                return (
-                  <LeaveRequestDoc
-                    data={req}
-                    onChange={(obj: any) => changeHandler(obj)}
-                  />
-                );
-            }
-          })
-        ) : (
-          <LeaveRequestForm />
-        )}
+        {state.data.map((req: LeaveRequest) => {
+          switch (tab) {
+            case REQUEST_TYPE.OUTSTATION:
+            case REQUEST_TYPE.CASUAL:
+              return secondaryTab == STATUS.ADD && isTrainee() ? (
+                <LeaveRequestForm />
+              ) : (
+                <LeaveRequestDoc
+                  data={req}
+                  onChange={(obj: any) => changeHandler(obj)}
+                  key={req.pno}
+                />
+              );
+            case REQUEST_TYPE.NIGHT:
+            case REQUEST_TYPE.SHORT:
+              return secondaryTab == STATUS.ADD && isTrainee() ? (
+                <ShortRequestForm />
+              ) : (
+                <ShortRequestDoc
+                  data={req}
+                  onChange={(obj: any) => changeHandler(obj)}
+                />
+              );
+            case REQUEST_TYPE.SICK:
+              return secondaryTab == STATUS.ADD && isTrainee() ? (
+                <SickRequestForm />
+              ) : (
+                <SickRequestDoc
+                  data={req}
+                  onChange={(obj: any) => changeHandler(obj)}
+                />
+              );
+            default:
+              return (
+                <LeaveRequestDoc
+                  data={req}
+                  onChange={(obj: any) => changeHandler(obj)}
+                />
+              );
+          }
+        })}
         {getData().length < 1 && <p>No Leave Requests to show</p>}
       </div>
     </div>

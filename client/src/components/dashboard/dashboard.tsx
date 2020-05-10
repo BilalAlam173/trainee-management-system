@@ -18,7 +18,6 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import List from "@material-ui/core/List";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import Alert from "@material-ui/lab/Alert";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
@@ -187,20 +186,6 @@ export function Dashboard() {
       <main className={classes.content}>
         <div className={classes.toolbar} />
         <RouteContainer />
-        {/* <div className={classes.root}>
-          <Alert severity="error" variant="filled">
-            This is an error alert — check it out!
-          </Alert>
-          <Alert severity="warning" variant="filled">
-            This is a warning alert — check it out!
-          </Alert>
-          <Alert severity="info" variant="filled">
-            This is an info alert — check it out!
-          </Alert>
-          <Alert severity="success" variant="filled">
-            This is a success alert — check it out!
-          </Alert>
-        </div> */}
       </main>
       <Divider />
       <Drawer
@@ -227,6 +212,9 @@ function RouteContainer() {
         <About />
       </Route>
       <Route path="/dashboard/trainee-list">
+        <TraineeList />
+      </Route>
+      <Route path="/dashboard/trainee-list/:batch">
         <TraineeList />
       </Route>
       <Route path="/dashboard/batch-list">

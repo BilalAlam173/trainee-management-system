@@ -9,18 +9,17 @@ import Divider from "@material-ui/core/Divider";
 import TextField from "@material-ui/core/TextField";
 import { getTrainee } from "../../../../services/data.service";
 import { currentUser, STATUS, REQUEST_TYPE } from "../../../../globals";
+import "react-datepicker/dist/react-datepicker.css";
+import DatePicker from "react-datepicker";
+
 import {
   LeaveRequest,
   LeaveRequestService,
   ShortRequest,
 } from "../../leave-request.service";
-import {
-  MuiPickersUtilsProvider,
-  KeyboardDatePicker,
-  KeyboardTimePicker,
-} from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import Button from "@material-ui/core/Button";
+let TimePicker = require("react-time-picker");
 
 export function ShortRequestForm(props: any) {
   const { tab } = props;
@@ -62,68 +61,76 @@ export function ShortRequestForm(props: any) {
       </Typography>
       <br />
       <Paper elevation={0} variant="outlined" className={classes.paper}>
-        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-          <List className={classes.root}>
-            <li>
-              <Typography
-                className={classes.dividerFullWidth}
-                display="block"
-                variant="caption"
-                align="center"
-              >
-                Personal Details
-              </Typography>
-            </li>
-            <Divider component="li" />
+        <List className={classes.root}>
+          <li>
+            <Typography
+              className={classes.dividerFullWidth}
+              display="block"
+              variant="caption"
+              align="center"
+            >
+              Personal Details
+            </Typography>
+          </li>
+          <Divider component="li" />
 
-            <ListItem>
-              <ListItemText primary={state.data.rank} secondary={"Rank"} />
-              <ListItemText primary={state.data.name} secondary={"Name "} />
-              <ListItemText primary={state.data.pno} secondary={"Pno"} />
-            </ListItem>
-            <ListItem>
-              <ListItemText primary={state.data.batch} secondary={"Batch "} />
-              <ListItemText
-                primary={state.data.division}
-                secondary={"Division"}
-              />
-              <ListItemText
-                primary={state.data.mobile}
-                secondary={"Mobile No"}
-              />
-            </ListItem>
+          <ListItem>
+            <ListItemText primary={state.data.rank} secondary={"Rank"} />
+            <ListItemText primary={state.data.name} secondary={"Name "} />
+            <ListItemText primary={state.data.pno} secondary={"Pno"} />
+          </ListItem>
+          <ListItem>
+            <ListItemText primary={state.data.batch} secondary={"Batch "} />
+            <ListItemText
+              primary={state.data.division}
+              secondary={"Division"}
+            />
+            <ListItemText primary={state.data.mobile} secondary={"Mobile No"} />
+          </ListItem>
 
-            <li>
-              <Typography
-                className={classes.dividerFullWidth}
-                display="block"
-                variant="caption"
-                align="center"
-              >
-                Request Details
-              </Typography>
-            </li>
-            <Divider component="li" />
-            <ListItem>
-              <KeyboardTimePicker
-                margin="normal"
-                id="time-picker"
-                label="Start Time"
-                value={state.data.startTime}
-                className={classes.halfWidth}
-                KeyboardButtonProps={{
-                  "aria-label": "change time",
-                }}
-                onChange={(date) => {
-                  setState({
-                    data: {
-                      ...state.data,
-                      startTime: date ? new Date(date) : new Date(),
-                    },
-                  });
-                }}
-              />
-              <KeyboardTimePicker
+          <li>
+            <Typography
+              className={classes.dividerFullWidth}
+              display="block"
+              variant="caption"
+              align="center"
+            >
+              Request Details
+            </Typography>
+          </li>
+          <Divider component="li" />
+          <ListItem>
+            <TextField
+              label="Start Time"
+              multiline
+              value={state.data.startTime.toLocaleTimeString()}
+              className={classes.itemContent}
+              type="number"
+              onChange={(e) =>
+                setState({
+                  data: {
+                    ...state.data,
+                    startTime: new Date(e.target.value),
+                  },
+                })
+              }
+            />
+            <TextField
+              label="End Time"
+              multiline
+              value={state.data.endTime.toLocaleTimeString()}
+              className={classes.itemContent}
+              type="number"
+              onChange={(e) =>
+                setState({
+                  data: {
+                    ...state.data,
+                    endTime: new Date(e.target.value),
+                  },
+                })
+              }
+            />
+            {/* <KeyboardTimePicker
                 margin="normal"
                 id="time-picker"
                 label="End Time"
@@ -140,44 +147,58 @@ export function ShortRequestForm(props: any) {
                     },
                   });
                 }}
-              />
-            </ListItem>
-            <ListItem>
-              <TextField
-                label="Reason"
-                multiline
-                value={state.data.reason}
-                className={classes.itemContent}
-                type="number"
-                onChange={(e) =>
+              /> */}
+          </ListItem>
+          <ListItem>
+            <TextField
+              label="Reason"
+              multiline
+              value={state.data.reason}
+              className={classes.itemContent}
+              type="number"
+              onChange={(e) =>
+                setState({
+                  data: {
+                    ...state.data,
+                    reason: e.target.value,
+                  },
+                })
+              }
+            />
+          </ListItem>
+          <ListItem>
+            <TextField
+              label="Address"
+              multiline
+              value={state.data.address}
+              className={classes.itemContent}
+              type="number"
+              onChange={(e) =>
+                setState({
+                  data: {
+                    ...state.data,
+                    address: e.target.value,
+                  },
+                })
+              }
+            />
+          </ListItem>
+          <ListItem>
+            <div className={classes.halfWidth}>
+              Date&nbsp;
+              <DatePicker
+                selected={state.data.date}
+                onChange={(date) => {
                   setState({
                     data: {
                       ...state.data,
-                      reason: e.target.value,
+                      date: date ? new Date(date) : new Date(),
                     },
-                  })
-                }
+                  });
+                }}
               />
-            </ListItem>
-            <ListItem>
-              <TextField
-                label="Address"
-                multiline
-                value={state.data.address}
-                className={classes.itemContent}
-                type="number"
-                onChange={(e) =>
-                  setState({
-                    data: {
-                      ...state.data,
-                      address: e.target.value,
-                    },
-                  })
-                }
-              />
-            </ListItem>
-            <ListItem>
-              <KeyboardDatePicker
+            </div>
+            {/* <KeyboardDatePicker
                 disableToolbar
                 variant="inline"
                 format="MM/dd/yyyy"
@@ -197,22 +218,21 @@ export function ShortRequestForm(props: any) {
                 KeyboardButtonProps={{
                   "aria-label": "change date",
                 }}
-              />
-            </ListItem>
-            <Divider component="li" />
-          </List>
-          <div className={classes.actions}>
-            <Button
-              variant="contained"
-              className={classes.actionBtns}
-              color="primary"
-              disabled={state.data.status !== STATUS.PENDING}
-              onClick={submit}
-            >
-              Submit
-            </Button>
-          </div>
-        </MuiPickersUtilsProvider>
+              /> */}
+          </ListItem>
+          <Divider component="li" />
+        </List>
+        <div className={classes.actions}>
+          <Button
+            variant="contained"
+            className={classes.actionBtns}
+            color="primary"
+            disabled={state.data.status !== STATUS.PENDING}
+            onClick={submit}
+          >
+            Submit
+          </Button>
+        </div>
       </Paper>
     </div>
   );

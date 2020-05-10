@@ -199,7 +199,7 @@ function Row(props: { row: Event; onRefresh: any }) {
                 format="MM/dd/yyyy"
                 margin="dense"
                 id="date-picker-inline"
-                label="With effective from"
+                label="date"
                 value={state.row.date}
                 onChange={(date) =>
                   setState({
@@ -247,7 +247,7 @@ function Row(props: { row: Event; onRefresh: any }) {
               <KeyboardTimePicker
                 margin="normal"
                 id="time-picker"
-                label="Start Time"
+                label="End Time"
                 value={state.row.endTime}
                 KeyboardButtonProps={{
                   "aria-label": "change time",

@@ -2,8 +2,7 @@ import React from "react";
 import MaterialTable, { Column } from "material-table";
 import { TraineeService } from "./trainee-list.service";
 import { USER_ROLES, currentUser } from "../../globals";
-import { Trainee } from "../../services/data.service";
-
+import { trainees } from "../../services/data.service";
 interface Row {
   name: string;
   rank: string;
@@ -18,10 +17,14 @@ interface TableState {
 }
 
 export function TraineeList() {
+  let batch =
+    window.location.pathname.split("/").length > 3 &&
+    window.location.pathname.split("/")[3];
   const service = TraineeService;
-  const [state, setState] = React.useState<TableState>({
+  console.log(batch);
+  const [state, setState] = React.useState({
     columns: service.columns,
-    data: service.data,
+    data: batch ? trainees.filter((x) => x.batch == batch) : trainees,
   });
 
   const isAllowed = () => {
@@ -33,6 +36,8 @@ export function TraineeList() {
     onRowAdd: (newData: any) =>
       new Promise((resolve) => {
         setTimeout(() => {
+          newData.batch = batch || newData.batch;
+          trainees.push(newData);
           setState((prevState) => {
             const data = [...prevState.data];
             data.push(newData);

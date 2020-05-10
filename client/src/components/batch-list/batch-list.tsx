@@ -8,6 +8,17 @@ import IconButton from "@material-ui/core/IconButton";
 import InfoIcon from "@material-ui/icons/Info";
 import { getAllBatches } from "../../services/batch-list.service";
 // import tileData from './tileData';
+import Card from "@material-ui/core/Card";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import Typography from "@material-ui/core/Typography";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  useRouteMatch,
+} from "react-router-dom";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -29,23 +40,6 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 const tileData = getAllBatches();
 
-/**
- * The example data is structured as follows:
- *
- * import image from 'path/to/image.jpg';
- * [etc...]
- *
- * const tileData = [
- *   {
- *     img: image,
- *     title: 'Image',
- *     author: 'author',
- *   },
- *   {
- *     [etc...]
- *   },
- * ];
- */
 export function BatchList() {
   const classes = useStyles();
 
@@ -58,16 +52,16 @@ export function BatchList() {
           </ListSubheader>
         </GridListTile>
         {tileData.map((tile: any) => (
-          <GridListTile key={tile.img} cols={3}>
-            <img src={tile.img} alt={tile.title} />
-            <GridListTileBar
-              title={tile.title}
-              subtitle={
-                <span>
-                  Trainees: {tile.count}, available: {tile.available}
-                </span>
-              }
-            />
+          <GridListTile key={tile.key} cols={3}>
+            <Link to={"/dashboard/trainee-list/" + tile.key}>
+              <Card variant="outlined">
+                <CardContent>
+                  <Typography color="textSecondary" gutterBottom>
+                    {tile.title}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Link>
           </GridListTile>
         ))}
       </GridList>

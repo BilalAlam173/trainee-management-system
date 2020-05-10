@@ -26,7 +26,7 @@ export default function App() {
 
   function authProtectedDashborad() {
     if (localStorage.getItem("token")) {
-      window.history.pushState({}, "", "/dashboard");
+      // window.history.pushState({}, "", "/dashboard");
       return <Dashboard />;
     } else {
       window.history.pushState({}, "", "/login");

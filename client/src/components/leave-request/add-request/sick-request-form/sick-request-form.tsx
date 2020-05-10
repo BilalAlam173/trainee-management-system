@@ -11,6 +11,8 @@ import { getTrainee } from "../../../../services/data.service";
 import { currentUser, STATUS, REQUEST_TYPE } from "../../../../globals";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
+import "react-datepicker/dist/react-datepicker.css";
+import DatePicker from "react-datepicker";
 import {
   LeaveRequest,
   LeaveRequestService,
@@ -47,7 +49,7 @@ export function SickRequestForm(props: any) {
   const classes = requestListStyles();
 
   const submit = (_e: any) => {
-    if (tab == REQUEST_TYPE.SHORT) {
+    if (tab == REQUEST_TYPE.SICK) {
       service.sickRequests.push(state.data);
     }
     service.buildMaps();
@@ -104,41 +106,35 @@ export function SickRequestForm(props: any) {
             </li>
             <Divider component="li" />
             <ListItem>
-              <KeyboardTimePicker
-                margin="normal"
-                id="time-picker"
-                label="Time In"
-                value={state.data.timeIn}
-                className={classes.halfWidth}
-                KeyboardButtonProps={{
-                  "aria-label": "change time",
-                }}
-                onChange={(date) => {
+              <TextField
+                label="Time in"
+                multiline
+                value={state.data.timeIn.toLocaleTimeString()}
+                className={classes.itemContent}
+                type="number"
+                onChange={(e) =>
                   setState({
                     data: {
                       ...state.data,
-                      timeIn: date ? new Date(date) : new Date(),
+                      timeIn: new Date(e.target.value),
                     },
-                  });
-                }}
+                  })
+                }
               />
-              <KeyboardTimePicker
-                margin="normal"
-                id="time-picker"
-                label="Time Out"
-                value={state.data.timeout}
-                className={classes.halfWidth}
-                KeyboardButtonProps={{
-                  "aria-label": "change time",
-                }}
-                onChange={(date) => {
+              <TextField
+                label="Time out"
+                multiline
+                value={state.data.timeout.toLocaleTimeString()}
+                className={classes.itemContent}
+                type="number"
+                onChange={(e) =>
                   setState({
                     data: {
                       ...state.data,
-                      timeout: date ? new Date(date) : new Date(),
+                      timeout: new Date(e.target.value),
                     },
-                  });
-                }}
+                  })
+                }
               />
             </ListItem>
             <ListItem>
@@ -178,27 +174,20 @@ export function SickRequestForm(props: any) {
                 }
                 label="Punishment"
               />
-              <KeyboardDatePicker
-                disableToolbar
-                variant="inline"
-                format="MM/dd/yyyy"
-                margin="dense"
-                id="date-picker-inline"
-                label="Date"
-                className={classes.halfWidth}
-                value={state.data.date}
-                onChange={(date) => {
-                  setState({
-                    data: {
-                      ...state.data,
-                      date: date ? new Date(date) : new Date(),
-                    },
-                  });
-                }}
-                KeyboardButtonProps={{
-                  "aria-label": "change date",
-                }}
-              />
+              <div className={classes.halfWidth}>
+                Date&nbsp;
+                <DatePicker
+                  selected={state.data.date}
+                  onChange={(date) => {
+                    setState({
+                      data: {
+                        ...state.data,
+                        date: date ? new Date(date) : new Date(),
+                      },
+                    });
+                  }}
+                />
+              </div>
             </ListItem>
             <Divider component="li" />
           </List>
