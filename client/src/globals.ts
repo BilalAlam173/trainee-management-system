@@ -14,6 +14,11 @@ export enum REQUEST_TYPE {
   SHORT,
   NIGHT,
 }
+export enum RANKS {
+  SUB_LT,
+  LT,
+  LT_CDR
+}
 
 export enum STATUS {
   APPROVED,

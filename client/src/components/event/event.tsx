@@ -192,79 +192,76 @@ function Row(props: { row: Event; onRefresh: any }) {
             )}
           </TableCell>
           <TableCell align="right">
-            {state.editMode ? (
-              <KeyboardDatePicker
-                disableToolbar
-                variant="inline"
-                format="MM/dd/yyyy"
-                margin="dense"
-                id="date-picker-inline"
-                label="date"
-                value={state.row.date}
-                onChange={(date) =>
-                  setState({
-                    ...state,
-                    row: {
-                      ...state.row,
-                      date: date ? new Date(date) : new Date(),
-                    },
-                  })
-                }
-                KeyboardButtonProps={{
-                  "aria-label": "change date",
-                }}
-              />
-            ) : (
-              state.row.date.toLocaleDateString()
-            )}
+            {state.editMode
+              ? // <KeyboardDatePicker
+                //   disableToolbar
+                //   variant="inline"
+                //   format="MM/dd/yyyy"
+                //   margin="dense"
+                //   id="date-picker-inline"
+                //   label="date"
+                //   value={state.row.date}
+                //   onChange={(date) =>
+                //     setState({
+                //       ...state,
+                //       row: {
+                //         ...state.row,
+                //         date: date ? new Date(date) : new Date(),
+                //       },
+                //     })
+                //   }
+                //   KeyboardButtonProps={{
+                //     "aria-label": "change date",
+                //   }}
+                // />
+                state.row.date.toLocaleDateString()
+              : state.row.date.toLocaleDateString()}
           </TableCell>
           <TableCell align="right">
-            {state.editMode ? (
-              <KeyboardTimePicker
-                margin="normal"
-                id="time-picker"
-                label="Start Time"
-                value={state.row.startTime}
-                KeyboardButtonProps={{
-                  "aria-label": "change time",
-                }}
-                onChange={(date) =>
-                  setState({
-                    ...state,
-                    row: {
-                      ...state.row,
-                      startTime: date ? new Date(date) : new Date(),
-                    },
-                  })
-                }
-              />
-            ) : (
-              state.row.startTime.toLocaleTimeString()
-            )}
+            {state.editMode
+              ? // <KeyboardTimePicker
+                //   margin="normal"
+                //   id="time-picker"
+                //   label="Start Time"
+                //   value={state.row.startTime}
+                //   KeyboardButtonProps={{
+                //     "aria-label": "change time",
+                //   }}
+                //   onChange={(date) =>
+                //     setState({
+                //       ...state,
+                //       row: {
+                //         ...state.row,
+                //         startTime: date ? new Date(date) : new Date(),
+                //       },
+                //     })
+                //   }
+                // />
+                state.row.startTime.toLocaleTimeString()
+              : state.row.startTime.toLocaleTimeString()}
           </TableCell>
           <TableCell align="right">
-            {state.editMode ? (
-              <KeyboardTimePicker
-                margin="normal"
-                id="time-picker"
-                label="End Time"
-                value={state.row.endTime}
-                KeyboardButtonProps={{
-                  "aria-label": "change time",
-                }}
-                onChange={(date) =>
-                  setState({
-                    ...state,
-                    row: {
-                      ...state.row,
-                      endTime: date ? new Date(date) : new Date(),
-                    },
-                  })
-                }
-              />
-            ) : (
-              state.row.endTime.toLocaleTimeString()
-            )}
+            {state.editMode
+              ? // <KeyboardTimePicker
+                //   margin="normal"
+                //   id="time-picker"
+                //   label="End Time"
+                //   value={state.row.endTime}
+                //   KeyboardButtonProps={{
+                //     "aria-label": "change time",
+                //   }}
+                //   onChange={(date) =>
+                //     setState({
+                //       ...state,
+                //       row: {
+                //         ...state.row,
+                //         endTime: date ? new Date(date) : new Date(),
+                //       },
+                //     })
+                //   }
+                // />
+                state.row.endTime.toLocaleTimeString()
+              : state.row.endTime.toLocaleTimeString()}
           </TableCell>
         </TableRow>
         <TableRow>
