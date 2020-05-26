@@ -17,7 +17,7 @@ class TraineeCtrl extends base_1.default {
                         return res.sendStatus(403);
                     }
                     const token = jwt.sign({ trainee }, process.env.SECRET_TOKEN); // , { expiresIn: 10 } seconds
-                    res.status(200).json({ token });
+                    res.status(200).json({ token, user: trainee });
                 });
             });
         };

@@ -13,6 +13,7 @@ const shortRequestSchema = new mongoose.Schema({
     jotoRemarks: String,
     aJotoRemarks: String,
     courseOfficerRemarks: String,
+    type: { type: globals_1.REQUEST_TYPE, default: globals_1.REQUEST_TYPE.SHORT },
     status: { type: globals_1.STATUS, default: globals_1.STATUS.PENDING },
 }, {
     timestamps: true,

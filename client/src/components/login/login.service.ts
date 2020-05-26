@@ -1,6 +1,7 @@
-import { USER_ROLES } from "../../globals";
+import { USER_ROLES, SERVER_URL, ADMINS } from "../../globals";
 import { TraineeService } from "../trainee-list/trainee-list.service";
 import { Trainee } from "../../services/data.service";
+import axios from "axios";
 
 export type Credential = {
   username: string;
@@ -8,35 +9,31 @@ export type Credential = {
   role: USER_ROLES;
 };
 export class LoginService {
-  static submitLogin(cred: Credential): string | void {
-    const { username, password, role } = cred;
-    const admins = [
-      "course_officer",
-      "joto",
-      "dean",
-      "cpt_training",
-      "dpty_cmdt",
-    ];
-    const trainee: Trainee = TraineeService.getTrainee(username);
+  static logout = () => {
+    localStorage.clear();
+    window.location.href = window.location.origin + "/";
+  };
 
-    switch (role) {
-      case USER_ROLES.ADMIN:
-        if (admins.includes(username) && password === "test123")
-          return "passed";
-        break;
-      case USER_ROLES.MEDICAL_ADMIN:
-        if (username === "medical_admin1" && password === "test123")
-          return "passed";
-        break;
-      case USER_ROLES.APPOINTMENT_HOLDER:
-        if (username === "appointee1" && password === "test123")
-          return "passed";
-        break;
-      case USER_ROLES.TRAINEE:
-        if (trainee && trainee.password == password) return "passed";
-        break;
-      default:
-        throw new Error("Incorrect Credentials");
+  static submitLogin(cred: Credential): Promise<any> {
+    let url: string;
+    let payload;
+    if (ADMINS.includes(cred.role)) {
+      url = SERVER_URL + "admin/login";
+      payload = {
+        username: cred.username,
+        password: cred.password,
+      };
+    } else {
+      url = SERVER_URL + "trainee/login";
+      payload = {
+        pno: cred.username,
+        password: cred.password,
+      };
     }
+    return axios.post(url, payload).then((res: any) => {
+      localStorage.setItem("token", res.data?.token);
+      localStorage.setItem("user", JSON.stringify(res.data?.user));
+      localStorage.setItem("isTrainee", res.data?.isTrainee);
+    });
   }
 }

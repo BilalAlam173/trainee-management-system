@@ -7,7 +7,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Divider from "@material-ui/core/Divider";
 import TextField from "@material-ui/core/TextField";
-import { getTrainee } from "../../../../services/data.service";
+import { getTrainee, addSickReq } from "../../../../services/data.service";
 import { currentUser, STATUS, REQUEST_TYPE } from "../../../../globals";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -31,7 +31,7 @@ export function SickRequestForm(props: any) {
   const { tab } = props;
   const service = LeaveRequestService;
   const data: SickRequest = {
-    ...currentUser(),
+    trainee: currentUser(),
     ...{
       pno: currentUser()?.pno,
       timeIn: new Date(),
@@ -39,6 +39,7 @@ export function SickRequestForm(props: any) {
       punishment: false,
       reason: "",
       date: new Date(),
+      type: tab,
       status: STATUS.PENDING,
     },
   };
@@ -48,12 +49,18 @@ export function SickRequestForm(props: any) {
   });
   const classes = requestListStyles();
 
-  const submit = (_e: any) => {
+  const submit = async (_e: any) => {
     if (tab == REQUEST_TYPE.SICK) {
-      service.sickRequests.push(state.data);
+      await addSickReq({
+        ...state.data,
+        type: tab,
+        trainee: currentUser()._id,
+      });
     }
     service.buildMaps();
     setState({ data });
+    alert('Request has successfully been sent to the admins for approval, Keep checking the status!')
+
   };
 
   return (
@@ -78,18 +85,30 @@ export function SickRequestForm(props: any) {
             <Divider component="li" />
 
             <ListItem>
-              <ListItemText primary={state.data.rank} secondary={"Rank"} />
-              <ListItemText primary={state.data.name} secondary={"Name "} />
-              <ListItemText primary={state.data.pno} secondary={"Pno"} />
+              <ListItemText
+                primary={state.data?.trainee?.rank}
+                secondary={"Rank"}
+              />
+              <ListItemText
+                primary={state.data?.trainee?.name}
+                secondary={"Name "}
+              />
+              <ListItemText
+                primary={state.data?.trainee?.pno}
+                secondary={"Pno"}
+              />
             </ListItem>
             <ListItem>
-              <ListItemText primary={state.data.batch} secondary={"Batch "} />
               <ListItemText
-                primary={state.data.division}
+                primary={state.data?.trainee?.batch}
+                secondary={"Batch "}
+              />
+              <ListItemText
+                primary={state.data?.trainee?.division}
                 secondary={"Division"}
               />
               <ListItemText
-                primary={state.data.mobile}
+                primary={state.data?.trainee?.mobile}
                 secondary={"Mobile No"}
               />
             </ListItem>

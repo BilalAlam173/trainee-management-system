@@ -18,12 +18,13 @@ import {
 } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import Button from "@material-ui/core/Button";
+import { addLeaveReq } from "../../../../services/data.service";
 
 export function LeaveRequestForm(props: any) {
   const { tab } = props;
   const service = LeaveRequestService;
   const data: LeaveRequest = {
-    ...currentUser(),
+    trainee: currentUser(),
     ...{
       pno: currentUser()?.pno,
       leaveAmount: 0,
@@ -32,6 +33,7 @@ export function LeaveRequestForm(props: any) {
       reason: "",
       address: "",
       date: new Date(),
+      type: tab,
       status: STATUS.PENDING,
     },
   };
@@ -41,14 +43,11 @@ export function LeaveRequestForm(props: any) {
   });
   const classes = requestListStyles();
 
-  const submit = (_e: any) => {
-    if (tab == REQUEST_TYPE.OUTSTATION) {
-      service.outstationRequests.push(state.data);
-    } else {
-      service.casualRequests.push(state.data);
-    }
+  const submit = async (_e: any) => {
+    await addLeaveReq({ ...state.data, type: tab, trainee: currentUser()._id });
     service.buildMaps();
     setState({ data });
+    alert('Request has successfully been sent to the admins for approval, Keep checking the status!')
   };
 
   return (
@@ -74,18 +73,30 @@ export function LeaveRequestForm(props: any) {
             <Divider component="li" />
 
             <ListItem>
-              <ListItemText primary={state.data.rank} secondary={"Rank"} />
-              <ListItemText primary={state.data.name} secondary={"Name "} />
-              <ListItemText primary={state.data.pno} secondary={"Pno"} />
+              <ListItemText
+                primary={state.data?.trainee?.rank}
+                secondary={"Rank"}
+              />
+              <ListItemText
+                primary={state.data?.trainee?.name}
+                secondary={"Name "}
+              />
+              <ListItemText
+                primary={state.data?.trainee?.pno}
+                secondary={"Pno"}
+              />
             </ListItem>
             <ListItem>
-              <ListItemText primary={state.data.batch} secondary={"Batch "} />
               <ListItemText
-                primary={state.data.division}
+                primary={state.data?.trainee?.batch}
+                secondary={"Batch "}
+              />
+              <ListItemText
+                primary={state.data?.trainee?.division}
                 secondary={"Division"}
               />
               <ListItemText
-                primary={state.data.mobile}
+                primary={state.data?.trainee?.mobile}
                 secondary={"Mobile No"}
               />
             </ListItem>
@@ -209,7 +220,7 @@ export function LeaveRequestForm(props: any) {
               </div>
 
               <div className={classes.halfWidth}>
-              Date&nbsp;
+                Date&nbsp;
                 <DatePicker
                   selected={state.data.date}
                   onChange={(date) => {

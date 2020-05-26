@@ -10,6 +10,7 @@ const sickRequestSchema = new mongoose.Schema({
     timeIn: Date,
     timeout: Date,
     date: Date,
+    type: { type: globals_1.REQUEST_TYPE, default: globals_1.REQUEST_TYPE.SICK },
     status: { type: globals_1.STATUS, default: globals_1.STATUS.PENDING },
 }, {
     timestamps: true,

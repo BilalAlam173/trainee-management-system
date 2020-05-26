@@ -62,16 +62,15 @@ export function Login() {
   const submit = () => {
     try {
       console.log(state);
-      const token = LoginService.submitLogin(state);
-      if (token) {
-        const user = { ...getTrainee(state.username), role: state.role } || {
-          username: state.username,
-          role: JSON.stringify(state.role),
-        };
-        localStorage.setItem("token", token);
-        localStorage.setItem("user", JSON.stringify(user));
-        history.push("/dashboard");
-      }
+      const token = LoginService.submitLogin(state)
+        .then(() => {
+          history.push("/dashboard");
+        })
+        .catch(() => {
+          window.alert(
+            "Failed to login! Please try again with correct credentials."
+          );
+        });
     } catch (e) {
       console.log(e);
     }

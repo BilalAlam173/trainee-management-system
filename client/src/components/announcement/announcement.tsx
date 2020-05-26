@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { AnnouncementStyle } from "./announcement.style";
 import { AnnouncementService, Notification } from "./announcement.service";
 import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
@@ -25,13 +25,17 @@ import SupervisorAccountIcon from "@material-ui/icons/SupervisorAccount";
 import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
 import CloseIcon from "@material-ui/icons/Close";
+import {
+  getAllAnnouncements,
+  addAnnouncement,
+} from "../../services/data.service";
 
 export function Announcement() {
   const classes = AnnouncementStyle();
   const service = AnnouncementService;
   const initState = {
     showAddForm: false,
-    data: service.data,
+    data: [] as any[],
     newAnnouncement: {
       header: "",
       message: "",
@@ -39,6 +43,21 @@ export function Announcement() {
   };
 
   let [state, setState] = React.useState(initState);
+
+  const getData = async () => {
+    const data = await getAllAnnouncements();
+    setState({
+      showAddForm: false,
+      data,
+      newAnnouncement: {
+        header: "",
+        message: "",
+      },
+    });
+  };
+  useEffect(() => {
+    getData();
+  }, []);
 
   const showAddForm = () => {
     setState({ ...state, showAddForm: true });
@@ -48,14 +67,12 @@ export function Announcement() {
     setState({ ...state, showAddForm: false });
   };
 
-  const submit = () => {
-    service.data.unshift({
+  const submit = async () => {
+    await addAnnouncement({
+      admin: currentUser()._id,
       ...state.newAnnouncement,
-      id: String(service.data.length + 1),
-      creator: currentUser()?.role || USER_ROLES.ADMIN,
-      dateTime: new Date(),
     });
-    setState({ ...state, data: service.data });
+    getData();
     hideAddForm();
   };
 
@@ -110,8 +127,7 @@ export function Announcement() {
                 <Grid container spacing={3}>
                   <Grid item xs={12} sm={3}>
                     <ListItemAvatar>
-                      {currentUser()?.role ==
-                      USER_ROLES.ADMIN ? (
+                      {currentUser()?.role == USER_ROLES.ADMIN ? (
                         <Avatar className={classes.green}>
                           <SupervisorAccountIcon />
                         </Avatar>
@@ -161,28 +177,42 @@ export function Announcement() {
               </ListItem>
             </React.Fragment>
           )}
-          {service.data.map((item: Notification) => (
-            <React.Fragment key={item.id}>
-              <ListSubheader className={classes.subheader}>
-                {service.formatDate(item.dateTime)}
-              </ListSubheader>
+          {state.data.length > 0 ? (
+            state.data.map((item: any) => (
+              <React.Fragment key={item.id}>
+                <ListSubheader className={classes.subheader}>
+                  {service.formatDate(new Date(item.createdAt))}
+                </ListSubheader>
 
-              <ListItem button>
-                <ListItemAvatar>
-                  {item.creator == USER_ROLES.ADMIN ? (
-                    <Avatar className={classes.green}>
-                      <SupervisorAccountIcon />
-                    </Avatar>
-                  ) : (
-                    <Avatar className={classes.pink}>
-                      <LocalHospitalIcon />
-                    </Avatar>
-                  )}
-                </ListItemAvatar>
-                <ListItemText primary={item.header} secondary={item.message} />
-              </ListItem>
-            </React.Fragment>
-          ))}
+                <ListItem button>
+                  <ListItemAvatar>
+                    {item.admin.role == USER_ROLES.ADMIN ? (
+                      <Avatar className={classes.green}>
+                        <SupervisorAccountIcon />
+                      </Avatar>
+                    ) : (
+                      <Avatar className={classes.pink}>
+                        <LocalHospitalIcon />
+                      </Avatar>
+                    )}
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary={item.header}
+                    secondary={item.message}
+                  />
+                </ListItem>
+              </React.Fragment>
+            ))
+          ) : (
+            <Typography
+              className={classes.text}
+              variant="body2"
+              align="center"
+              gutterBottom
+            >
+              No announcements to show
+            </Typography>
+          )}
         </List>
       </Paper>
     </React.Fragment>

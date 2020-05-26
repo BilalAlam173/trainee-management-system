@@ -1,6 +1,6 @@
 import * as bcrypt from "bcryptjs";
 import * as mongoose from "mongoose";
-import { RANKS } from "../../../client/src/globals";
+import { RANKS, USER_ROLES } from "../../../client/src/globals";
 
 const traineeSchema = new mongoose.Schema(
   {
@@ -13,6 +13,11 @@ const traineeSchema = new mongoose.Schema(
     mobile: String,
     status: String,
     statusReason: String,
+    role: {
+      type: USER_ROLES,
+      default: USER_ROLES.TRAINEE,
+      enum: [USER_ROLES.TRAINEE],
+    },
   },
   {
     timestamps: true,
@@ -29,7 +34,8 @@ traineeSchema.pre("save", function (next) {
     if (err) {
       return next(err);
     }
-    bcrypt.hash(trainee.password, salt, (error, hash) => {
+    console.log(trainee.password);
+    bcrypt.hash(trainee.password || "test123", salt, (error, hash) => {
       if (error) {
         return next(error);
       }

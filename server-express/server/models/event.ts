@@ -3,14 +3,15 @@ import { STATUS } from "../../../client/src/globals";
 
 const eventSchema = new mongoose.Schema(
   {
-    trainee: { type: mongoose.Schema.Types.ObjectId, ref: "Trainee" },
-    punishment: Boolean,
-    reason: String,
-    smoRemarks: String,
-    timeIn: Date,
-    timeout: Date,
-    date: Date,
-    status: { type: STATUS, default: STATUS.PENDING },
+    participants: [{ type: mongoose.Schema.Types.ObjectId, ref: "Trainee" }],
+    title: { type: String, default: "" },
+    venue: { type: String, default: "" },
+    date: { type: Date, default: new Date() },
+    startTime: { type: Date, default: new Date() },
+    endTime: { type: Date, default: new Date() },
+    description: { type: String, default: "" },
+    new: { type: Boolean, default: true },
+    creator: { type: mongoose.Schema.Types.ObjectId, ref: "Admin" },
   },
   {
     timestamps: true,

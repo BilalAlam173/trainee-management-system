@@ -7,7 +7,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Divider from "@material-ui/core/Divider";
 import TextField from "@material-ui/core/TextField";
-import { getTrainee } from "../../../../services/data.service";
+import { getTrainee, addShortReq } from "../../../../services/data.service";
 import { currentUser, STATUS, REQUEST_TYPE } from "../../../../globals";
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
@@ -25,7 +25,7 @@ export function ShortRequestForm(props: any) {
   const { tab } = props;
   const service = LeaveRequestService;
   const data: ShortRequest = {
-    ...currentUser(),
+    trainee: currentUser(),
     ...{
       pno: currentUser()?.pno,
       startTime: new Date(),
@@ -33,6 +33,7 @@ export function ShortRequestForm(props: any) {
       reason: "",
       date: new Date(),
       address: "",
+      type: tab,
       status: STATUS.PENDING,
     },
   };
@@ -42,14 +43,13 @@ export function ShortRequestForm(props: any) {
   });
   const classes = requestListStyles();
 
-  const submit = (_e: any) => {
-    if (tab == REQUEST_TYPE.SHORT) {
-      service.shortLeaveRequests.push(state.data);
-    } else {
-      service.nightOffRequests.push(state.data);
-    }
+  const submit = async (_e: any) => {
+    await addShortReq({ ...state.data, type: tab, trainee: currentUser()._id });
     service.buildMaps();
     setState({ data });
+    alert(
+      "Request has successfully been sent to the admins for approval, Keep checking the status!"
+    );
   };
 
   return (
@@ -75,17 +75,32 @@ export function ShortRequestForm(props: any) {
           <Divider component="li" />
 
           <ListItem>
-            <ListItemText primary={state.data.rank} secondary={"Rank"} />
-            <ListItemText primary={state.data.name} secondary={"Name "} />
-            <ListItemText primary={state.data.pno} secondary={"Pno"} />
+            <ListItemText
+              primary={state.data?.trainee?.rank}
+              secondary={"Rank"}
+            />
+            <ListItemText
+              primary={state.data?.trainee?.name}
+              secondary={"Name "}
+            />
+            <ListItemText
+              primary={state.data?.trainee?.pno}
+              secondary={"Pno"}
+            />
           </ListItem>
           <ListItem>
-            <ListItemText primary={state.data.batch} secondary={"Batch "} />
             <ListItemText
-              primary={state.data.division}
+              primary={state.data?.trainee?.batch}
+              secondary={"Batch "}
+            />
+            <ListItemText
+              primary={state.data?.trainee?.division}
               secondary={"Division"}
             />
-            <ListItemText primary={state.data.mobile} secondary={"Mobile No"} />
+            <ListItemText
+              primary={state.data?.trainee?.mobile}
+              secondary={"Mobile No"}
+            />
           </ListItem>
 
           <li>

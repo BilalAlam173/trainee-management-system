@@ -21,10 +21,10 @@ import { getTrainee } from "../../../../services/data.service";
 export function ShortRequestDoc(props: any) {
   const { data } = props;
   const [state, setState] = useState({
-    data: { ...data, ...getTrainee(data.pno) },
+    data: { ...data },
   });
   useEffect(() => {
-    setState({ data: { ...props.data, ...getTrainee(data.pno) } });
+    setState({ data: { ...props.data } });
   }, [props]);
 
   const classes = requestListStyles();
@@ -36,10 +36,14 @@ export function ShortRequestDoc(props: any) {
         id="panel1a-header"
       >
         <Typography className={classes.heading}>
-          <b>{state.data.name}</b>
+          <b>{state.data?.trainee?.name}</b>
           <span className={classes.statusBar}>
-            {state.data.status == STATUS.APPROVED && <ThumbUpIcon color="primary" />}
-            {state.data.status == STATUS.DECLINED && <BlockIcon color="error" />}
+            {state.data.status == STATUS.APPROVED && (
+              <ThumbUpIcon color="primary" />
+            )}
+            {state.data.status == STATUS.DECLINED && (
+              <BlockIcon color="error" />
+            )}
           </span>
         </Typography>
       </ExpansionPanelSummary>
@@ -58,14 +62,32 @@ export function ShortRequestDoc(props: any) {
               </Typography>
             </li>
             <ListItem>
-              <ListItemText primary={state.data.rank} secondary={"Rank"} />
-              <ListItemText primary={state.data.name} secondary={"Name "} />
-              <ListItemText primary={state.data.pno} secondary={"Pno"} />
+              <ListItemText
+                primary={state.data?.trainee?.rank}
+                secondary={"Rank"}
+              />
+              <ListItemText
+                primary={state.data?.trainee?.name}
+                secondary={"Name "}
+              />
+              <ListItemText
+                primary={state.data?.trainee?.pno}
+                secondary={"Pno"}
+              />
             </ListItem>
             <ListItem>
-              <ListItemText primary={state.data.batch} secondary={"Batch "} />
-              <ListItemText primary={state.data.division} secondary={"Division"} />
-              <ListItemText primary={state.data.mobile} secondary={"Mobile No"} />
+              <ListItemText
+                primary={state.data?.trainee?.batch}
+                secondary={"Batch "}
+              />
+              <ListItemText
+                primary={state.data?.trainee?.division}
+                secondary={"Division"}
+              />
+              <ListItemText
+                primary={state.data?.trainee?.mobile}
+                secondary={"Mobile No"}
+              />
             </ListItem>
             <Divider component="li" />
             <li>
@@ -80,20 +102,23 @@ export function ShortRequestDoc(props: any) {
             </li>
             <ListItem>
               <ListItemText
-                primary={state.data.endTime.toLocaleTimeString()}
+                primary={new Date(state.data.endTime).toLocaleTimeString()}
                 secondary={"End Time"}
               />
               <ListItemText
-                primary={state.data.startTime.toLocaleTimeString()}
+                primary={new Date(state.data.startTime).toLocaleTimeString()}
                 secondary={"Start Time"}
               />
               <ListItemText
-                primary={state.data.date.toLocaleDateString()}
+                primary={new Date(state.data.date).toLocaleDateString()}
                 secondary={"Date"}
               />
             </ListItem>
             <ListItem>
-              <ListItemText primary={state.data.address} secondary={"Address"} />
+              <ListItemText
+                primary={state.data.address}
+                secondary={"Address"}
+              />
               <ListItemText primary={state.data.reason} secondary={"Reason"} />
               <ListItemText
                 primary={getSecondaryTabText(state.data.status)}

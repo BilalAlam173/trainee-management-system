@@ -19,7 +19,7 @@ function setRoutes(app) {
   const announcementCtrl = new AnnouncementCtrl();
 
   // admins
-  router.route("/login").post(adminCtrl.login);
+  router.route("/admin/login").post(adminCtrl.login);
   router.route("/admins").get(adminCtrl.getAll);
   router.route("/admins/count").get(adminCtrl.count);
   router.route("/admin").post(adminCtrl.insert);
@@ -34,7 +34,7 @@ function setRoutes(app) {
   router.route("/leaveRequest/:id").put(leaveRequestCtrl.update);
   router.route("/leaveRequest/:id").delete(leaveRequestCtrl.delete);
   // shortLeave
-  router.route("/ashortLeaves").get(shortLeaveCtrl.getAll);
+  router.route("/shortLeaves").get(shortLeaveCtrl.getAll);
   router.route("/shortLeaves/count").get(shortLeaveCtrl.count);
   router.route("/shortLeave").post(shortLeaveCtrl.insert);
   router.route("/shortLeave/:id").get(shortLeaveCtrl.get);
@@ -63,7 +63,7 @@ function setRoutes(app) {
   router.route("/announcement/:id").delete(announcementCtrl.delete);
 
   // Trainees
-  router.route("/login").post(traineeCtrl.login);
+  router.route("/trainee/login").post(traineeCtrl.login);
   router.route("/trainees").get(traineeCtrl.getAll);
   router.route("/trainees/count").get(traineeCtrl.count);
   router.route("/trainee").post(traineeCtrl.insert);

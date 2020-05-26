@@ -1,233 +1,116 @@
-import { USER_ROLES } from "../globals";
-
-export const trainees: Trainee[] = [
-  {
-    pno: "0001",
-    rank: "S/lt",
-    name: "Daniyal Kazim",
-    password: "test123",
-    batch: "MIS-2",
-    division: "Alpha",
-    mobile: "034512356478",
-  },
-  {
-    pno: "0002",
-    rank: "S/lt",
-    name: "hamza Kazim",
-    password: "test123",
-    batch: "MIS-1",
-    division: "Alpha",
-    mobile: "034512356478",
-  },
-  {
-    pno: "0003",
-    rank: "S/lt",
-    name: "Danish Kazim",
-    password: "test123",
-    batch: "ME-2",
-    division: "Alpha",
-    mobile: "034512356478",
-  },
-  {
-    pno: "0004",
-    rank: "S/lt",
-    name: "Mushtaq Kazim",
-    password: "test123",
-    batch: "ME-3",
-    division: "Alpha",
-    mobile: "034512356478",
-  },
-  {
-    pno: "0005",
-    rank: "S/lt",
-    name: "Karim Kazim",
-    password: "test123",
-    batch: "WE-1",
-    division: "Alpha",
-    mobile: "034512356478",
-  },
-  {
-    pno: "0006",
-    rank: "S/lt",
-    name: "Daniyal Khan",
-    password: "test123",
-    batch: "WE-2",
-    division: "Alpha",
-    mobile: "034512356478",
-  },
-  {
-    pno: "0007",
-    rank: "S/lt",
-    name: "Atif Khan",
-    password: "test123",
-    batch: "WE-3",
-    division: "Alpha",
-    mobile: "034512356478",
-  },
-  {
-    pno: "0008",
-    rank: "S/lt",
-    name: "Mansoor Kazim",
-    password: "test123",
-    batch: "WE-4",
-    division: "Alpha",
-    mobile: "034512356478",
-  },
-  {
-    pno: "0009",
-    rank: "S/lt",
-    name: "Asif Khan",
-    password: "test123",
-    batch: "ME-3",
-    division: "Alpha",
-    mobile: "034512356478",
-  },
-  {
-    pno: "0010",
-    rank: "S/lt",
-    name: "Dawood Ahmed",
-    password: "test123",
-    batch: "ME-4",
-    division: "Alpha",
-    mobile: "034512356478",
-  },
-  {
-    pno: "0011",
-    rank: "S/lt",
-    name: "Ahmed Hassan",
-    password: "test123",
-    batch: "MIS-2",
-    division: "Alpha",
-    mobile: "034512356478",
-  },
-  {
-    pno: "0012",
-    rank: "S/lt",
-    name: "Mehmood Khan",
-    password: "test123",
-    batch: "MIS-2",
-    division: "Alpha",
-    mobile: "034512356478",
-  },
-  {
-    pno: "0013",
-    rank: "S/lt",
-    name: "saqib Javed",
-    password: "test123",
-    batch: "ME-1",
-    division: "Alpha",
-    mobile: "034512356478",
-  },
-  {
-    pno: "0014",
-    rank: "S/lt",
-    name: "Wasim Khan",
-    password: "test123",
-    batch: "WE-4",
-    division: "Alpha",
-    mobile: "034512356478",
-  },
-  {
-    pno: "0015",
-    rank: "S/lt",
-    name: "Hamza Nazir Khan",
-    password: "test123",
-    batch: "WE-3",
-    division: "Alpha",
-    mobile: "034512356478",
-  },
-  {
-    pno: "0016",
-    rank: "S/lt",
-    name: "Ameen Kazim",
-    password: "test123",
-    batch: "MIS-2",
-    division: "Alpha",
-    mobile: "034512356478",
-  },
-  {
-    pno: "0017",
-    rank: "S/lt",
-    name: "Shaan Kazim",
-    password: "test123",
-    batch: "WE-1",
-    division: "Alpha",
-    mobile: "034512356478",
-  },
-  {
-    pno: "0018",
-    rank: "S/lt",
-    name: "ali Kazim",
-    password: "test123",
-    batch: "MIS-2",
-    division: "Alpha",
-    mobile: "034512356478",
-  },
-  {
-    pno: "0019",
-    rank: "S/lt",
-    name: "wamiq Kazim",
-    password: "test123",
-    batch: "MIS-2",
-    division: "Alpha",
-    mobile: "034512356478",
-  },
-  {
-    pno: "0020",
-    rank: "S/lt",
-    name: "Asghar Kazim",
-    password: "test123",
-    batch: "MIS-2",
-    division: "Alpha",
-    mobile: "034512356478",
-  },
-  {
-    pno: "0021",
-    rank: "S/lt",
-    name: "Anas Kazim",
-    password: "test123",
-    batch: "MIS-2",
-    division: "Alpha",
-    mobile: "034512356478",
-  },
-  {
-    pno: "0022",
-    rank: "S/lt",
-    name: "Fahad Kazim",
-    password: "test123",
-    batch: "ME-2",
-    division: "Alpha",
-    mobile: "034512356478",
-  },
-  {
-    pno: "0023",
-    rank: "S/lt",
-    name: "Faisal Kazim",
-    password: "test123",
-    batch: "MIS-2",
-    division: "Alpha",
-    mobile: "034512356478",
-  },
-  {
-    pno: "0024",
-    rank: "S/lt",
-    name: "Moosa Kazim",
-    password: "test123",
-    batch: "MIS-2",
-    division: "Alpha",
-    mobile: "034512356478",
-  },
-];
-export const getTrainee = (pno: any): Trainee | null => {
-  return trainees.find((x) => x.pno == pno) || null;
+import { USER_ROLES, SERVER_URL } from "../globals";
+import axios from "axios";
+import {
+  LeaveRequest,
+  ShortRequest,
+  SickRequest,
+} from "../components/leave-request/leave-request.service";
+import { Event } from "../components/event/event.service";
+/* Trainee CRUD* */
+export const getTrainee = (id: string): Promise<Trainee> => {
+  return axios.get(SERVER_URL + "trainee/" + id).then((res) => res.data);
 };
 
-export const updateTrainee = (user: Trainee) => {
-  const idx = trainees.findIndex((x) => x.pno == user.pno);
-  trainees[idx] = user;
-  localStorage.setItem("user", JSON.stringify(user));
+export const getAllTrainees = (): Promise<Trainee[]> => {
+  return axios.get(SERVER_URL + "trainees").then((res) => res.data);
 };
+export const updateTrainee = (user: Trainee): Promise<void> => {
+  return axios.put(SERVER_URL + "trainee/" + user._id, user);
+};
+export const deleteTrainee = (userId: string): Promise<void> => {
+  return axios.delete(SERVER_URL + "trainee/" + userId);
+};
+
+export const addTrainee = (user: Trainee): Promise<void> => {
+  return axios.post(SERVER_URL + "trainee", user);
+};
+
+/** LeaveRequest CRUD */
+
+export const getLeaveReq = (id: string): Promise<LeaveRequest> => {
+  return axios.get(SERVER_URL + "leaveRequest/" + id).then((res) => res.data);
+};
+
+export const getAllLeaveReq = (): Promise<LeaveRequest[]> => {
+  return axios.get(SERVER_URL + "leaveRequests").then((res) => res.data);
+};
+export const updateLeaveReq = (user: Trainee): Promise<void> => {
+  return axios.put(SERVER_URL + "leaveRequest/" + user._id, user);
+};
+
+export const addLeaveReq = (user: LeaveRequest): Promise<void> => {
+  return axios.post(SERVER_URL + "leaveRequest", user);
+};
+
+/** SHORT REQ CRUD */
+
+export const getShortReq = (id: string): Promise<ShortRequest> => {
+  return axios.get(SERVER_URL + "shortLeave/" + id).then((res) => res.data);
+};
+
+export const getAllShortReqs = (): Promise<ShortRequest[]> => {
+  return axios.get(SERVER_URL + "shortLeaves").then((res) => res.data);
+};
+export const updateShortReq = (item: ShortRequest): Promise<void> => {
+  return axios.put(SERVER_URL + "shortLeave/" + item._id, item);
+};
+
+export const addShortReq = (user: ShortRequest): Promise<void> => {
+  return axios.post(SERVER_URL + "shortLeave", user);
+};
+
+/** SICK REQ CRUD */
+
+export const getSickReq = (id: string): Promise<SickRequest> => {
+  return axios.get(SERVER_URL + "sickLeave/" + id).then((res) => res.data);
+};
+
+export const getAllSickReqs = (): Promise<SickRequest[]> => {
+  return axios.get(SERVER_URL + "sickLeaves").then((res) => res.data);
+};
+export const updateSickReq = (user: SickRequest): Promise<void> => {
+  return axios.put(SERVER_URL + "sickLeave/" + user._id, user);
+};
+
+export const addSickReq = (user: SickRequest): Promise<void> => {
+  return axios.post(SERVER_URL + "sickLeave", user);
+};
+/** EVENT CRUD */
+
+export const getEvent = (id: string): Promise<Trainee> => {
+  return axios.get(SERVER_URL + "event/" + id).then((res) => res.data);
+};
+
+export const getAllEvents = (): Promise<Event[]> => {
+  return axios.get(SERVER_URL + "events").then((res) => res.data);
+};
+export const updateEvent = (user: Event): Promise<void> => {
+  return axios.put(SERVER_URL + "event/" + user._id, user);
+};
+export const deleteEvent = (userId: string): Promise<void> => {
+  return axios.delete(SERVER_URL + "event/" + userId);
+};
+
+export const addEvent = (user: Event): Promise<void> => {
+  return axios.post(SERVER_URL + "event", user);
+};
+/** ANNOUNCEMENT CRUD */
+
+export const getAnnouncement = (id: string): Promise<any> => {
+  return axios.get(SERVER_URL + "announcements/" + id).then((res) => res.data);
+};
+export const getAllAnnouncements = (): Promise<any[]> => {
+  return axios.get(SERVER_URL + "announcements").then((res) => res.data);
+};
+export const updateAnnouncement = (user: any): Promise<void> => {
+  return axios.put(SERVER_URL + "announcement/" + user._id, user);
+};
+export const addAnnouncement = (user: any): Promise<void> => {
+  return axios.post(SERVER_URL + "announcement", user);
+};
+
 export class Trainee {
+  _id?: string = "";
   pno: string = "";
   password: string = "";
   rank: string = "";

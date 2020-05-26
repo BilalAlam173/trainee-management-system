@@ -16,7 +16,7 @@ import Avatar from "@material-ui/core/Avatar";
 const useStyles = profileStyles;
 export function Profile() {
   const classes = useStyles();
-  const user: Trainee = getTrainee(currentUser()?.pno) || {
+  const user: Trainee = currentUser() || {
     pno: "",
     name: "",
     rank: "",

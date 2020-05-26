@@ -4,8 +4,8 @@ import { STATUS } from "../../../client/src/globals";
 const announcementSchema = new mongoose.Schema(
   {
     admin: { type: mongoose.Schema.Types.ObjectId, ref: "Admin" },
-    subject: Boolean,
-    description: String,
+    header: { type: String, default: "" },
+    message: { type: String, default: "" },
   },
   {
     timestamps: true,

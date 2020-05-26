@@ -19,6 +19,7 @@ import {
   ShortRequest,
   SickRequest,
 } from "../leave-request.service";
+import { updateLeaveReq } from "../../../services/data.service";
 import { LeaveRequest } from "../leave-request.service";
 import { LeaveRequestDoc } from "./leave-request-doc/leave-request-doc";
 import { ShortRequestDoc } from "./short-request-doc/short-request-doc";
@@ -32,37 +33,43 @@ export function LeaveRequestList(props: any) {
   const classes = requestListStyles();
   const service = LeaveRequestService;
 
-  const getData = (): any[] => {
+  const getData = async () => {
+    await service.buildMaps();
     if (isAdmin()) {
-      return service.requestToAdminMap[tab][secondaryTab] || [];
+      setState({
+        data: service.requestToAdminMap[tab][secondaryTab] || [],
+      });
     } else {
-      return (
-        service.requestToStatusMap[tab][secondaryTab].filter(
-          (x: any) => x.pno == currentUser()?.pno
-        ) || []
-      );
+      try {
+        setState({
+          data:
+            service.requestToStatusMap[tab][secondaryTab].filter(
+              (x: any) => x.trainee._id == currentUser()?._id
+            ) || [],
+        });
+      } catch (e) {
+        return [];
+      }
     }
   };
 
   const [state, setState] = useState({
-    data: getData(),
+    data: [],
   });
 
-  const setData = (obj: any) => {
+  useEffect(() => {
+    getData();
+  }, [props]);
+
+  const setData = async (obj: any) => {
     if (isAdmin()) {
-      const idx = service.requestToAdminMap[tab][secondaryTab].findIndex(
-        (x: any) => x.pno == obj.pno
-      );
-      service.requestToAdminMap[tab][secondaryTab][idx] = obj;
-      service.update(service.requestToAdminMap[tab][secondaryTab], tab);
+      if (tab === REQUEST_TYPE.OUTSTATION) {
+        await updateLeaveReq(obj);
+      }
       service.buildMaps();
-      setState({ data: getData() });
+      getData();
     }
   };
-
-  useEffect(() => {
-    setState({ data: getData() });
-  }, [props]);
 
   const changeHandler = (obj: any) => {
     setData(obj);
@@ -84,7 +91,7 @@ export function LeaveRequestList(props: any) {
                 <LeaveRequestDoc
                   data={req}
                   onChange={(obj: any) => changeHandler(obj)}
-                  key={req.pno}
+                  key={req?.trainee?._id}
                 />
               );
             case REQUEST_TYPE.NIGHT:
@@ -95,6 +102,7 @@ export function LeaveRequestList(props: any) {
                 <ShortRequestDoc
                   data={req}
                   onChange={(obj: any) => changeHandler(obj)}
+                  key={req?.trainee?._id}
                 />
               );
             case REQUEST_TYPE.SICK:
@@ -104,6 +112,7 @@ export function LeaveRequestList(props: any) {
                 <SickRequestDoc
                   data={req}
                   onChange={(obj: any) => changeHandler(obj)}
+                  key={req?.trainee?._id}
                 />
               );
             default:
@@ -115,7 +124,7 @@ export function LeaveRequestList(props: any) {
               );
           }
         })}
-        {getData().length < 1 && <p>No Leave Requests to show</p>}
+        {state.data.length < 1 && <p>No Leave Requests to show</p>}
       </div>
     </div>
   );

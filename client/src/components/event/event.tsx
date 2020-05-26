@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { eventStyles } from "./event.style";
 
 import Box from "@material-ui/core/Box";
@@ -14,14 +14,14 @@ import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
+import { Event } from "./event.service";
 import {
-  getEvents,
-  Event,
+  Trainee,
+  getAllEvents,
+  addEvent,
   updateEvent,
   deleteEvent,
-  addEvent,
-} from "./event.service";
-import { Trainee } from "../../services/data.service";
+} from "../../services/data.service";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import { currentUser, isSuperOfficer } from "../../globals";
@@ -36,12 +36,22 @@ export function EventPage() {
   const classes = eventStyles();
 
   const [state, setState] = useState({
-    events: getEvents(),
+    events: [] as any[],
   });
 
-  const add = () => {
-    addEvent({
-      id: 0,
+  const getData = async () => {
+    const events: any[] = await getAllEvents();
+    setState({
+      events,
+    });
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const add = async () => {
+    await addEvent({
       title: "",
       venue: "",
       date: new Date(),
@@ -49,12 +59,9 @@ export function EventPage() {
       endTime: new Date(),
       description: "",
       participants: [],
-      creator: "",
-      isNew: true,
+      creator: currentUser()._id,
     });
-    setState({
-      events: getEvents(),
-    });
+    await getData();
   };
 
   return (
@@ -71,14 +78,12 @@ export function EventPage() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {state.events.map((event) => (
+          {state.events?.map((event) => (
             <Row
-              key={event.id}
+              key={event._id}
               row={event}
               onRefresh={() => {
-                setState({
-                  events: getEvents(),
-                });
+                getData();
               }}
             />
           ))}
@@ -102,39 +107,42 @@ export function EventPage() {
   );
 }
 const isAlreadyMember = (data: any[]) => {
-  return data.findIndex((x: any) => x?.pno == currentUser()?.pno || "") > -1;
+  if (data && data.length > 0) {
+    return data.findIndex((x: any) => x?._id == currentUser()?._id || "") > -1;
+  } else {
+    return false;
+  }
 };
 function Row(props: { row: Event; onRefresh: any }) {
   const { row, onRefresh } = props;
-  const [open, setOpen] = React.useState(row.isNew);
+  const [open, setOpen] = React.useState(row.new);
   const classes = eventStyles();
   const initState = {
-    editMode: !!row.isNew,
+    editMode: !!row.new,
     addMode: false,
     row,
   };
   const [state, setState] = useState(initState);
 
-  const save = () => {
-    updateEvent(state.row);
-    console.log(getEvents());
+  const save = async () => {
+    await updateEvent({ ...state.row, new: false });
     setState({
       ...state,
       editMode: false,
     });
   };
-  const participate = () => {
-    state.row.participants.push(currentUser());
-    updateEvent(state.row);
+  const participate = async () => {
+    state.row.participants.push(currentUser()._id);
+    await updateEvent(state.row);
+    onRefresh();
     setState({
       ...state,
-
       editMode: false,
     });
   };
 
-  const deleteRow = () => {
-    deleteEvent(state.row);
+  const deleteRow = async () => {
+    await deleteEvent(state.row._id);
     onRefresh();
   };
 
@@ -200,7 +208,7 @@ function Row(props: { row: Event; onRefresh: any }) {
                 //   margin="dense"
                 //   id="date-picker-inline"
                 //   label="date"
-                //   value={state.row.date}
+                //   value={new Date(state.row.date)}
                 //   onChange={(date) =>
                 //     setState({
                 //       ...state,
@@ -214,8 +222,8 @@ function Row(props: { row: Event; onRefresh: any }) {
                 //     "aria-label": "change date",
                 //   }}
                 // />
-                state.row.date.toLocaleDateString()
-              : state.row.date.toLocaleDateString()}
+                new Date(state.row.date).toLocaleDateString()
+              : new Date(state.row.date).toLocaleDateString()}
           </TableCell>
           <TableCell align="right">
             {state.editMode
@@ -223,7 +231,7 @@ function Row(props: { row: Event; onRefresh: any }) {
                 //   margin="normal"
                 //   id="time-picker"
                 //   label="Start Time"
-                //   value={state.row.startTime}
+                //   value={new Date(state.row.startTime)}
                 //   KeyboardButtonProps={{
                 //     "aria-label": "change time",
                 //   }}
@@ -237,8 +245,8 @@ function Row(props: { row: Event; onRefresh: any }) {
                 //     })
                 //   }
                 // />
-                state.row.startTime.toLocaleTimeString()
-              : state.row.startTime.toLocaleTimeString()}
+                new Date(state.row.startTime).toLocaleTimeString()
+              : new Date(state.row.startTime).toLocaleTimeString()}
           </TableCell>
           <TableCell align="right">
             {state.editMode
@@ -246,7 +254,7 @@ function Row(props: { row: Event; onRefresh: any }) {
                 //   margin="normal"
                 //   id="time-picker"
                 //   label="End Time"
-                //   value={state.row.endTime}
+                //   value={new Date(state.row.endTime)}
                 //   KeyboardButtonProps={{
                 //     "aria-label": "change time",
                 //   }}
@@ -260,8 +268,8 @@ function Row(props: { row: Event; onRefresh: any }) {
                 //     })
                 //   }
                 // />
-                state.row.endTime.toLocaleTimeString()
-              : state.row.endTime.toLocaleTimeString()}
+                new Date(state.row.endTime).toLocaleTimeString()
+              : new Date(state.row.endTime).toLocaleTimeString()}
           </TableCell>
         </TableRow>
         <TableRow>
@@ -274,7 +282,7 @@ function Row(props: { row: Event; onRefresh: any }) {
                 <Typography variant="body1" gutterBottom component="div">
                   {state.editMode ? (
                     <TextField
-                      label="Venue"
+                      label="Description"
                       multiline
                       value={state.row.description}
                       className={classes.fullWidth}
@@ -306,8 +314,8 @@ function Row(props: { row: Event; onRefresh: any }) {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {row.participants.map((user: Trainee) => (
-                      <TableRow key={user.pno}>
+                    {row.participants?.map((user: Trainee) => (
+                      <TableRow key={user._id}>
                         <TableCell component="th" scope="row">
                           {user.pno}
                         </TableCell>
@@ -332,14 +340,6 @@ function Row(props: { row: Event; onRefresh: any }) {
                   </div>
                 ) : (
                   <div className={classes.actions}>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      className={classes.actionBtns}
-                      disabled={isAlreadyMember(row.participants)}
-                    >
-                      Add
-                    </Button>
                     {!state.editMode ? (
                       <Button
                         variant="contained"

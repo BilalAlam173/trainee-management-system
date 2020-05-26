@@ -2,6 +2,7 @@ import * as jwt from "jsonwebtoken";
 
 import Trainee from "../models/trainee";
 import BaseCtrl from "./base";
+import { USER_ROLES } from "../../../client/src/globals";
 
 class TraineeCtrl extends BaseCtrl {
   model = Trainee;
@@ -16,7 +17,7 @@ class TraineeCtrl extends BaseCtrl {
           return res.sendStatus(403);
         }
         const token = jwt.sign({ trainee }, process.env.SECRET_TOKEN); // , { expiresIn: 10 } seconds
-        res.status(200).json({ token });
+        res.status(200).json({ token, user: trainee });
       });
     });
   };

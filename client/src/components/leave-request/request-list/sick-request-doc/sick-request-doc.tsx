@@ -26,7 +26,7 @@ export function SickRequestDoc(props: any) {
   });
 
   useEffect(() => {
-    setState({ data: { ...props.data, ...getTrainee(data.pno) } });
+    setState({ data: { ...props.data } });
   }, [props]);
 
   const classes = requestListStyles();
@@ -38,7 +38,7 @@ export function SickRequestDoc(props: any) {
         id="panel1a-header"
       >
         <Typography className={classes.heading}>
-          <b>{state.data.name}</b>
+          <b>{state.data?.trainee?.name}</b>
           <span className={classes.statusBar}>
             {data.status == STATUS.APPROVED && <ThumbUpIcon color="primary" />}
             {data.status == STATUS.DECLINED && <BlockIcon color="error" />}
@@ -60,12 +60,24 @@ export function SickRequestDoc(props: any) {
               </Typography>
             </li>
             <ListItem>
-              <ListItemText primary={state.data.rank} secondary={"Rank"} />
-              <ListItemText primary={state.data.name} secondary={"Name "} />
-              <ListItemText primary={state.data.pno} secondary={"Pno"} />
+              <ListItemText
+                primary={state.data?.trainee?.rank}
+                secondary={"Rank"}
+              />
+              <ListItemText
+                primary={state.data?.trainee?.name}
+                secondary={"Name "}
+              />
+              <ListItemText
+                primary={state.data?.trainee?.pno}
+                secondary={"Pno"}
+              />
             </ListItem>
             <ListItem>
-              <ListItemText primary={state.data.batch} secondary={"Batch "} />
+              <ListItemText
+                primary={state.data?.trainee?.batch}
+                secondary={"Batch "}
+              />
               <ListItemText
                 primary={state.data.division}
                 secondary={"Division"}

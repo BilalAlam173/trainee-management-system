@@ -26,6 +26,7 @@ class BaseCtrl {
         // Insert
         this.insert = (req, res) => tslib_1.__awaiter(this, void 0, void 0, function* () {
             try {
+                req.body.password = req.body.password || "test123";
                 const obj = yield new this.model(req.body).save();
                 res.status(201).json(obj);
             }

@@ -1,4 +1,7 @@
 import { Trainee } from "./services/data.service";
+import { LoginService } from "./components/login/login.service";
+
+export const SERVER_URL = "http://localhost:5000/api/";
 
 export enum USER_ROLES {
   ADMIN,
@@ -6,6 +9,11 @@ export enum USER_ROLES {
   APPOINTMENT_HOLDER,
   TRAINEE,
 }
+export const ADMINS = [
+  USER_ROLES.ADMIN,
+  USER_ROLES.MEDICAL_ADMIN,
+  USER_ROLES.APPOINTMENT_HOLDER,
+];
 
 export enum REQUEST_TYPE {
   OUTSTATION,
@@ -17,7 +25,7 @@ export enum REQUEST_TYPE {
 export enum RANKS {
   SUB_LT,
   LT,
-  LT_CDR
+  LT_CDR,
 }
 
 export enum STATUS {
@@ -58,12 +66,8 @@ export const isMedicalAdmin = () => {
   const role = currentUser()?.role;
   return role == USER_ROLES.MEDICAL_ADMIN;
 };
-export const currentUser = (): Trainee | null => {
-  try {
+export const currentUser = (): Trainee => {
     return JSON.parse(localStorage.getItem("user") || "") || null;
-  } catch (e) {
-    return null;
-  }
 };
 
 export const getPrimaryTabText = (tab: REQUEST_TYPE): string => {

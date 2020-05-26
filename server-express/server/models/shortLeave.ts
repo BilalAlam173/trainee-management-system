@@ -1,6 +1,6 @@
 import * as bcrypt from "bcryptjs";
 import * as mongoose from "mongoose";
-import { RANKS, STATUS } from "../../../client/src/globals";
+import { RANKS, STATUS, REQUEST_TYPE } from "../../../client/src/globals";
 
 const shortRequestSchema = new mongoose.Schema(
   {
@@ -14,6 +14,7 @@ const shortRequestSchema = new mongoose.Schema(
     jotoRemarks: String,
     aJotoRemarks: String,
     courseOfficerRemarks: String,
+    type: { type: REQUEST_TYPE, default: REQUEST_TYPE.SHORT },
     status: { type: STATUS, default: STATUS.PENDING },
   },
   {

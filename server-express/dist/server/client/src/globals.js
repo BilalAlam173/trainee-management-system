@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.SERVER_URL = "http://localhost:5000/api/";
 var USER_ROLES;
 (function (USER_ROLES) {
     USER_ROLES[USER_ROLES["ADMIN"] = 0] = "ADMIN";
@@ -7,6 +8,11 @@ var USER_ROLES;
     USER_ROLES[USER_ROLES["APPOINTMENT_HOLDER"] = 2] = "APPOINTMENT_HOLDER";
     USER_ROLES[USER_ROLES["TRAINEE"] = 3] = "TRAINEE";
 })(USER_ROLES = exports.USER_ROLES || (exports.USER_ROLES = {}));
+exports.ADMINS = [
+    USER_ROLES.ADMIN,
+    USER_ROLES.MEDICAL_ADMIN,
+    USER_ROLES.APPOINTMENT_HOLDER,
+];
 var REQUEST_TYPE;
 (function (REQUEST_TYPE) {
     REQUEST_TYPE[REQUEST_TYPE["OUTSTATION"] = 0] = "OUTSTATION";
@@ -65,12 +71,7 @@ exports.isMedicalAdmin = () => {
     return role == USER_ROLES.MEDICAL_ADMIN;
 };
 exports.currentUser = () => {
-    try {
-        return JSON.parse(localStorage.getItem("user") || "") || null;
-    }
-    catch (e) {
-        return null;
-    }
+    return JSON.parse(localStorage.getItem("user") || "") || null;
 };
 exports.getPrimaryTabText = (tab) => {
     switch (tab) {

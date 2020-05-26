@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const bcrypt = require("bcryptjs");
 const mongoose = require("mongoose");
+const globals_1 = require("../../../client/src/globals");
 const traineeSchema = new mongoose.Schema({
     pno: String,
     password: String,
@@ -12,6 +13,11 @@ const traineeSchema = new mongoose.Schema({
     mobile: String,
     status: String,
     statusReason: String,
+    role: {
+        type: globals_1.USER_ROLES,
+        default: globals_1.USER_ROLES.TRAINEE,
+        enum: [globals_1.USER_ROLES.TRAINEE],
+    },
 }, {
     timestamps: true,
 });
@@ -25,7 +31,8 @@ traineeSchema.pre("save", function (next) {
         if (err) {
             return next(err);
         }
-        bcrypt.hash(trainee.password, salt, (error, hash) => {
+        console.log(trainee.password);
+        bcrypt.hash(trainee.password || "test123", salt, (error, hash) => {
             if (error) {
                 return next(error);
             }
