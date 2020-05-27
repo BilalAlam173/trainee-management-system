@@ -494,8 +494,8 @@ export interface LeaveRequest {
 export interface ShortRequest {
   _id?: string;
   trainee?: any;
-  startTime: Date;
-  endTime: Date;
+  startTime: string;
+  endTime: string;
   reason: string;
   date: Date;
   address: string;
@@ -513,8 +513,8 @@ export interface SickRequest {
   punishment: boolean;
   reason: string;
   smoRemarks?: string;
-  timeIn: Date;
-  timeout: Date;
+  timeIn: string;
+  timeout: string;
   date?: Date;
   type: REQUEST_TYPE;
   status: STATUS;

@@ -102,11 +102,11 @@ export function ShortRequestDoc(props: any) {
             </li>
             <ListItem>
               <ListItemText
-                primary={new Date(state.data.endTime).toLocaleTimeString()}
+                primary={state.data.endTime}
                 secondary={"End Time"}
               />
               <ListItemText
-                primary={new Date(state.data.startTime).toLocaleTimeString()}
+                primary={state.data.startTime}
                 secondary={"Start Time"}
               />
               <ListItemText
