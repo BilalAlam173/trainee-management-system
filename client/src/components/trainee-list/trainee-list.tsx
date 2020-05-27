@@ -9,6 +9,7 @@ import {
   updateTrainee,
   deleteTrainee,
 } from "../../services/data.service";
+declare var location: any;
 interface Row {
   name: string;
   rank: string;
@@ -41,7 +42,7 @@ export function TraineeList() {
 
   useEffect(() => {
     getData();
-  }, []);
+  }, [location.pathname]);
 
   const isAllowed = () => {
     const role = currentUser()?.role;
