@@ -1,10 +1,7 @@
 import { STATUS, REQUEST_TYPE, ADMIN_TYPES } from "../../globals";
-import { stat } from "fs";
-import { LeaveRequest } from "./leave-request";
 import {
   getAllLeaveReq,
   getAllShortReqs,
-  Trainee,
   getAllSickReqs,
 } from "../../services/data.service";
 
