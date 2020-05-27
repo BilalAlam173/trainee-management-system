@@ -201,6 +201,9 @@ export function ShortRequestDoc(props: any) {
                 className={classes.actionBtns}
                 color="default"
                 disabled={state.data.status !== STATUS.PENDING}
+                onClick={() => {
+                  props.onChange(state.data);
+                }}
               >
                 save
               </Button>

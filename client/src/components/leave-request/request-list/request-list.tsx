@@ -19,7 +19,7 @@ import {
   ShortRequest,
   SickRequest,
 } from "../leave-request.service";
-import { updateLeaveReq } from "../../../services/data.service";
+import { updateLeaveReq, updateShortReq, updateSickReq } from "../../../services/data.service";
 import { LeaveRequest } from "../leave-request.service";
 import { LeaveRequestDoc } from "./leave-request-doc/leave-request-doc";
 import { ShortRequestDoc } from "./short-request-doc/short-request-doc";
@@ -63,8 +63,12 @@ export function LeaveRequestList(props: any) {
 
   const setData = async (obj: any) => {
     if (isAdmin()) {
-      if (tab === REQUEST_TYPE.OUTSTATION) {
+      if (tab === REQUEST_TYPE.OUTSTATION || tab === REQUEST_TYPE.CASUAL) {
         await updateLeaveReq(obj);
+      } else if (tab === REQUEST_TYPE.SHORT || tab === REQUEST_TYPE.NIGHT) {
+        await updateShortReq(obj);
+      } else {
+        await updateSickReq(obj);
       }
       service.buildMaps();
       getData();
