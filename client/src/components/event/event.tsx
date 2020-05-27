@@ -26,11 +26,9 @@ import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import { currentUser, isSuperOfficer } from "../../globals";
 import DateFnsUtils from "@date-io/date-fns";
-import {
-  MuiPickersUtilsProvider,
-  KeyboardDatePicker,
-  KeyboardTimePicker,
-} from "@material-ui/pickers";
+import DatePicker from "react-datepicker";
+// @ts-ignore
+import TimePicker from "react-time-picker";
 
 export function EventPage() {
   const classes = eventStyles();
@@ -55,8 +53,8 @@ export function EventPage() {
       title: "",
       venue: "",
       date: new Date(),
-      startTime: new Date(),
-      endTime: new Date(),
+      startTime: "",
+      endTime: "",
       description: "",
       participants: [],
       creator: currentUser()._id,
@@ -148,241 +146,242 @@ function Row(props: { row: Event; onRefresh: any }) {
 
   return (
     <React.Fragment>
-      <MuiPickersUtilsProvider utils={DateFnsUtils}>
-        <TableRow className={classes.root}>
-          <TableCell>
-            <IconButton
-              aria-label="expand row"
-              size="small"
-              onClick={() => setOpen(!open)}
-            >
-              {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-            </IconButton>
-          </TableCell>
-          <TableCell component="th" scope="row">
-            {state.editMode ? (
-              <TextField
-                label="Title"
-                multiline
-                value={state.row.title}
-                onChange={(e) =>
-                  setState({
-                    ...state,
-                    row: {
-                      ...state.row,
-                      title: e.target.value,
-                    },
-                  })
-                }
-              />
-            ) : (
-              state.row.title
-            )}
-          </TableCell>
-          <TableCell align="right">
-            {state.editMode ? (
-              <TextField
-                label="Venue"
-                multiline
-                value={state.row.venue}
-                onChange={(e) =>
-                  setState({
-                    ...state,
-                    row: {
-                      ...state.row,
-                      venue: e.target.value,
-                    },
-                  })
-                }
-              />
-            ) : (
-              state.row.venue
-            )}
-          </TableCell>
-          <TableCell align="right">
-            {state.editMode
-              ? // <KeyboardDatePicker
-                //   disableToolbar
-                //   variant="inline"
-                //   format="MM/dd/yyyy"
-                //   margin="dense"
-                //   id="date-picker-inline"
-                //   label="date"
-                //   value={new Date(state.row.date)}
-                //   onChange={(date) =>
-                //     setState({
-                //       ...state,
-                //       row: {
-                //         ...state.row,
-                //         date: date ? new Date(date) : new Date(),
-                //       },
-                //     })
-                //   }
-                //   KeyboardButtonProps={{
-                //     "aria-label": "change date",
-                //   }}
-                // />
-                new Date(state.row.date).toLocaleDateString()
-              : new Date(state.row.date).toLocaleDateString()}
-          </TableCell>
-          <TableCell align="right">
-            {state.editMode
-              ? // <KeyboardTimePicker
-                //   margin="normal"
-                //   id="time-picker"
-                //   label="Start Time"
-                //   value={new Date(state.row.startTime)}
-                //   KeyboardButtonProps={{
-                //     "aria-label": "change time",
-                //   }}
-                //   onChange={(date) =>
-                //     setState({
-                //       ...state,
-                //       row: {
-                //         ...state.row,
-                //         startTime: date ? new Date(date) : new Date(),
-                //       },
-                //     })
-                //   }
-                // />
-                new Date(state.row.startTime).toLocaleTimeString()
-              : new Date(state.row.startTime).toLocaleTimeString()}
-          </TableCell>
-          <TableCell align="right">
-            {state.editMode
-              ? // <KeyboardTimePicker
-                //   margin="normal"
-                //   id="time-picker"
-                //   label="End Time"
-                //   value={new Date(state.row.endTime)}
-                //   KeyboardButtonProps={{
-                //     "aria-label": "change time",
-                //   }}
-                //   onChange={(date) =>
-                //     setState({
-                //       ...state,
-                //       row: {
-                //         ...state.row,
-                //         endTime: date ? new Date(date) : new Date(),
-                //       },
-                //     })
-                //   }
-                // />
-                new Date(state.row.endTime).toLocaleTimeString()
-              : new Date(state.row.endTime).toLocaleTimeString()}
-          </TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-            <Collapse in={open} timeout="auto" unmountOnExit>
-              <Box margin={1}>
-                <Typography variant="h6" gutterBottom component="div">
-                  Description
-                </Typography>
-                <Typography variant="body1" gutterBottom component="div">
-                  {state.editMode ? (
-                    <TextField
-                      label="Description"
-                      multiline
-                      value={state.row.description}
-                      className={classes.fullWidth}
-                      onChange={(e) =>
-                        setState({
-                          ...state,
-                          row: {
-                            ...state.row,
-                            description: e.target.value,
-                          },
-                        })
-                      }
-                    />
-                  ) : (
-                    state.row.description
-                  )}
-                </Typography>
-                <Typography variant="h6" gutterBottom component="div">
-                  Participants
-                </Typography>
-                <Table size="small" aria-label="purchases">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Pno</TableCell>
-                      <TableCell>Rank</TableCell>
-                      <TableCell align="right">Name</TableCell>
-                      <TableCell align="right">Division</TableCell>
-                      <TableCell align="right">Mobile</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {row.participants?.map((user: Trainee) => (
-                      <TableRow key={user._id}>
-                        <TableCell component="th" scope="row">
-                          {user.pno}
-                        </TableCell>
-                        <TableCell>{user.rank}</TableCell>
-                        <TableCell>{user.name}</TableCell>
-                        <TableCell align="right">{user.division}</TableCell>
-                        <TableCell align="right">{user.mobile}</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-                {!isSuperOfficer() ? (
-                  <div className={classes.actions}>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      disabled={isAlreadyMember(row.participants)}
-                      onClick={participate}
-                    >
-                      Participate
-                    </Button>
-                  </div>
+      <TableRow className={classes.root}>
+        <TableCell>
+          <IconButton
+            aria-label="expand row"
+            size="small"
+            onClick={() => setOpen(!open)}
+          >
+            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+          </IconButton>
+        </TableCell>
+        <TableCell component="th" scope="row">
+          {state.editMode ? (
+            <TextField
+              label="Title"
+              multiline
+              value={state.row.title}
+              onChange={(e) =>
+                setState({
+                  ...state,
+                  row: {
+                    ...state.row,
+                    title: e.target.value,
+                  },
+                })
+              }
+            />
+          ) : (
+            state.row.title
+          )}
+        </TableCell>
+        <TableCell align="right">
+          {state.editMode ? (
+            <TextField
+              label="Venue"
+              multiline
+              value={state.row.venue}
+              onChange={(e) =>
+                setState({
+                  ...state,
+                  row: {
+                    ...state.row,
+                    venue: e.target.value,
+                  },
+                })
+              }
+            />
+          ) : (
+            state.row.venue
+          )}
+        </TableCell>
+        <TableCell align="right">
+          {state.editMode ? (
+            // <KeyboardDatePicker
+            //   disableToolbar
+            //   variant="inline"
+            //   format="MM/dd/yyyy"
+            //   margin="dense"
+            //   id="date-picker-inline"
+            //   label="date"
+            //   value={new Date(state.row.date)}
+            //   onChange={(date) =>
+            //     setState({
+            //       ...state,
+            //       row: {
+            //         ...state.row,
+            //         date: date ? new Date(date) : new Date(),
+            //       },
+            //     })
+            //   }
+            //   KeyboardButtonProps={{
+            //     "aria-label": "change date",
+            //   }}
+            // />
+            <DatePicker
+              selected={new Date(state.row.date)}
+              onChange={(date) => {
+                setState({
+                  ...state,
+                  row: {
+                    ...state.row,
+                    date: date ? new Date(date) : new Date(),
+                  },
+                });
+              }}
+            />
+          ) : (
+            new Date(state.row.date).toLocaleDateString()
+          )}
+        </TableCell>
+        <TableCell align="right">
+          {state.editMode ? (
+            <TimePicker
+              value={state.row.startTime}
+              onChange={(time: any) =>
+                setState({
+                  ...state,
+                  row: {
+                    ...state.row,
+                    startTime: time,
+                  },
+                })
+              }
+            />
+          ) : (
+            state.row.startTime
+          )}
+        </TableCell>
+        <TableCell align="right">
+          {state.editMode ? (
+            <TimePicker
+              value={state.row.endTime}
+              onChange={(time: any) =>
+                setState({
+                  ...state,
+                  row: {
+                    ...state.row,
+                    endTime: time,
+                  },
+                })
+              }
+            />
+          ) : (
+            state.row.endTime
+          )}
+        </TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+          <Collapse in={open} timeout="auto" unmountOnExit>
+            <Box margin={1}>
+              <Typography variant="h6" gutterBottom component="div">
+                Description
+              </Typography>
+              <Typography variant="body1" gutterBottom component="div">
+                {state.editMode ? (
+                  <TextField
+                    label="Description"
+                    multiline
+                    value={state.row.description}
+                    className={classes.fullWidth}
+                    onChange={(e) =>
+                      setState({
+                        ...state,
+                        row: {
+                          ...state.row,
+                          description: e.target.value,
+                        },
+                      })
+                    }
+                  />
                 ) : (
-                  <div className={classes.actions}>
-                    {!state.editMode ? (
-                      <Button
-                        variant="contained"
-                        color="default"
-                        className={classes.actionBtns}
-                        disabled={isAlreadyMember(row.participants)}
-                        onClick={() => {
-                          setState({
-                            ...state,
-                            editMode: true,
-                          });
-                        }}
-                      >
-                        Edit
-                      </Button>
-                    ) : (
-                      <Button
-                        variant="contained"
-                        color="default"
-                        className={classes.actionBtns}
-                        disabled={isAlreadyMember(row.participants)}
-                        onClick={save}
-                      >
-                        Save
-                      </Button>
-                    )}
-
+                  state.row.description
+                )}
+              </Typography>
+              <Typography variant="h6" gutterBottom component="div">
+                Participants
+              </Typography>
+              <Table size="small" aria-label="purchases">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Pno</TableCell>
+                    <TableCell>Rank</TableCell>
+                    <TableCell align="right">Name</TableCell>
+                    <TableCell align="right">Division</TableCell>
+                    <TableCell align="right">Mobile</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {row.participants?.map((user: Trainee) => (
+                    <TableRow key={user._id}>
+                      <TableCell component="th" scope="row">
+                        {user.pno}
+                      </TableCell>
+                      <TableCell>{user.rank}</TableCell>
+                      <TableCell>{user.name}</TableCell>
+                      <TableCell align="right">{user.division}</TableCell>
+                      <TableCell align="right">{user.mobile}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+              {!isSuperOfficer() ? (
+                <div className={classes.actions}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    disabled={isAlreadyMember(row.participants)}
+                    onClick={participate}
+                  >
+                    Participate
+                  </Button>
+                </div>
+              ) : (
+                <div className={classes.actions}>
+                  {!state.editMode ? (
                     <Button
                       variant="contained"
-                      color="secondary"
+                      color="default"
                       className={classes.actionBtns}
                       disabled={isAlreadyMember(row.participants)}
-                      onClick={deleteRow}
+                      onClick={() => {
+                        setState({
+                          ...state,
+                          editMode: true,
+                        });
+                      }}
                     >
-                      Delete
+                      Edit
                     </Button>
-                  </div>
-                )}
-              </Box>
-            </Collapse>
-          </TableCell>
-        </TableRow>
-      </MuiPickersUtilsProvider>
+                  ) : (
+                    <Button
+                      variant="contained"
+                      color="default"
+                      className={classes.actionBtns}
+                      disabled={isAlreadyMember(row.participants)}
+                      onClick={save}
+                    >
+                      Save
+                    </Button>
+                  )}
+
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    className={classes.actionBtns}
+                    disabled={isAlreadyMember(row.participants)}
+                    onClick={deleteRow}
+                  >
+                    Delete
+                  </Button>
+                </div>
+              )}
+            </Box>
+          </Collapse>
+        </TableCell>
+      </TableRow>
     </React.Fragment>
   );
 }

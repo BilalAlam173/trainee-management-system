@@ -117,12 +117,16 @@ export function SickRequestDoc(props: any) {
             </ListItem>
 
             <ListItem>
+            <ListItemText
+                primary={state.data.date}
+                secondary={"Date"}
+              />
               <ListItemText
-                primary={state.data.timeIn?.toLocaleString()}
+                primary={state.data.timeIn}
                 secondary={"Time in"}
               />
               <ListItemText
-                primary={state.data.timeout?.toLocaleString()}
+                primary={state.data.timeout}
                 secondary={"Time out"}
               />
             </ListItem>

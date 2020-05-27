@@ -19,13 +19,10 @@ import {
   ShortRequest,
   SickRequest,
 } from "../../leave-request.service";
-import {
-  MuiPickersUtilsProvider,
-  KeyboardDatePicker,
-  KeyboardTimePicker,
-} from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import Button from "@material-ui/core/Button";
+// @ts-ignore
+import TimePicker from "react-time-picker";
 
 export function SickRequestForm(props: any) {
   const { tab } = props;
@@ -34,8 +31,8 @@ export function SickRequestForm(props: any) {
     trainee: currentUser(),
     ...{
       pno: currentUser()?.pno,
-      timeIn: new Date(),
-      timeout: new Date(),
+      timeIn: "",
+      timeout: "",
       punishment: false,
       reason: "",
       date: new Date(),
@@ -59,8 +56,9 @@ export function SickRequestForm(props: any) {
     }
     service.buildMaps();
     setState({ data });
-    alert('Request has successfully been sent to the admins for approval, Keep checking the status!')
-
+    alert(
+      "Request has successfully been sent to the admins for approval, Keep checking the status!"
+    );
   };
 
   return (
@@ -70,158 +68,152 @@ export function SickRequestForm(props: any) {
       </Typography>
       <br />
       <Paper elevation={0} variant="outlined" className={classes.paper}>
-        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-          <List className={classes.root}>
-            <li>
-              <Typography
-                className={classes.dividerFullWidth}
-                display="block"
-                variant="caption"
-                align="center"
-              >
-                Personal Details
-              </Typography>
-            </li>
-            <Divider component="li" />
+        <List className={classes.root}>
+          <li>
+            <Typography
+              className={classes.dividerFullWidth}
+              display="block"
+              variant="caption"
+              align="center"
+            >
+              Personal Details
+            </Typography>
+          </li>
+          <Divider component="li" />
 
-            <ListItem>
-              <ListItemText
-                primary={state.data?.trainee?.rank}
-                secondary={"Rank"}
-              />
-              <ListItemText
-                primary={state.data?.trainee?.name}
-                secondary={"Name "}
-              />
-              <ListItemText
-                primary={state.data?.trainee?.pno}
-                secondary={"Pno"}
-              />
-            </ListItem>
-            <ListItem>
-              <ListItemText
-                primary={state.data?.trainee?.batch}
-                secondary={"Batch "}
-              />
-              <ListItemText
-                primary={state.data?.trainee?.division}
-                secondary={"Division"}
-              />
-              <ListItemText
-                primary={state.data?.trainee?.mobile}
-                secondary={"Mobile No"}
-              />
-            </ListItem>
+          <ListItem>
+            <ListItemText
+              primary={state.data?.trainee?.rank}
+              secondary={"Rank"}
+            />
+            <ListItemText
+              primary={state.data?.trainee?.name}
+              secondary={"Name "}
+            />
+            <ListItemText
+              primary={state.data?.trainee?.pno}
+              secondary={"Pno"}
+            />
+          </ListItem>
+          <ListItem>
+            <ListItemText
+              primary={state.data?.trainee?.batch}
+              secondary={"Batch "}
+            />
+            <ListItemText
+              primary={state.data?.trainee?.division}
+              secondary={"Division"}
+            />
+            <ListItemText
+              primary={state.data?.trainee?.mobile}
+              secondary={"Mobile No"}
+            />
+          </ListItem>
 
-            <li>
-              <Typography
-                className={classes.dividerFullWidth}
-                display="block"
-                variant="caption"
-                align="center"
-              >
-                Request Details
-              </Typography>
-            </li>
-            <Divider component="li" />
-            <ListItem>
-              <TextField
-                label="Time in"
-                multiline
-                value={state.data.timeIn.toLocaleTimeString()}
-                className={classes.itemContent}
-                type="number"
-                onChange={(e) =>
-                  setState({
-                    data: {
-                      ...state.data,
-                      timeIn: new Date(e.target.value),
-                    },
-                  })
-                }
-              />
-              <TextField
-                label="Time out"
-                multiline
-                value={state.data.timeout.toLocaleTimeString()}
-                className={classes.itemContent}
-                type="number"
-                onChange={(e) =>
-                  setState({
-                    data: {
-                      ...state.data,
-                      timeout: new Date(e.target.value),
-                    },
-                  })
-                }
-              />
-            </ListItem>
-            <ListItem>
-              <TextField
-                label="Reason"
-                multiline
-                value={state.data.reason}
-                className={classes.itemContent}
-                type="number"
-                onChange={(e) =>
-                  setState({
-                    data: {
-                      ...state.data,
-                      reason: e.target.value,
-                    },
-                  })
-                }
-              />
-            </ListItem>
-            <ListItem></ListItem>
-            <ListItem>
-              <FormControlLabel
-                className={classes.halfWidth}
-                control={
-                  <Checkbox
-                    checked={state.data.punishment}
-                    onChange={(e) => {
-                      setState({
-                        data: {
-                          ...state.data,
-                          punishment: e.target.checked,
-                        },
-                      });
-                    }}
-                    inputProps={{ "aria-label": "primary checkbox" }}
-                  />
-                }
-                label="Punishment"
-              />
-              <div className={classes.halfWidth}>
-                Date&nbsp;
-                <DatePicker
-                  selected={state.data.date}
-                  onChange={(date) => {
+          <li>
+            <Typography
+              className={classes.dividerFullWidth}
+              display="block"
+              variant="caption"
+              align="center"
+            >
+              Request Details
+            </Typography>
+          </li>
+          <Divider component="li" />
+          <ListItem>
+            <p>Time in</p>
+            <TimePicker
+              value={state.data.timeIn}
+              onChange={(time: any) =>
+                setState({
+                  ...state,
+                  data: {
+                    ...state.data,
+                    timeIn: time,
+                  },
+                })
+              }
+            />
+            <p>Time Out</p>
+            <TimePicker
+              value={state.data.timeout}
+              onChange={(time: any) =>
+                setState({
+                  ...state,
+                  data: {
+                    ...state.data,
+                    timeout: time,
+                  },
+                })
+              }
+            />
+          </ListItem>
+          <ListItem>
+            <TextField
+              label="Reason"
+              multiline
+              value={state.data.reason}
+              className={classes.itemContent}
+              type="number"
+              onChange={(e) =>
+                setState({
+                  data: {
+                    ...state.data,
+                    reason: e.target.value,
+                  },
+                })
+              }
+            />
+          </ListItem>
+          <ListItem></ListItem>
+          <ListItem>
+            <FormControlLabel
+              className={classes.halfWidth}
+              control={
+                <Checkbox
+                  checked={state.data.punishment}
+                  onChange={(e) => {
                     setState({
                       data: {
                         ...state.data,
-                        date: date ? new Date(date) : new Date(),
+                        punishment: e.target.checked,
                       },
                     });
                   }}
+                  inputProps={{ "aria-label": "primary checkbox" }}
                 />
-              </div>
-            </ListItem>
-            <Divider component="li" />
-          </List>
-          <div className={classes.actions}>
-            <Button
-              variant="contained"
-              className={classes.actionBtns}
-              color="primary"
-              disabled={state.data.status !== STATUS.PENDING}
-              onClick={submit}
-            >
-              Submit
-            </Button>
-          </div>
-        </MuiPickersUtilsProvider>
+              }
+              label="Punishment"
+            />
+            <div className={classes.halfWidth}>
+              Date&nbsp;
+              <DatePicker
+                selected={state.data.date}
+                onChange={(date) => {
+                  setState({
+                    data: {
+                      ...state.data,
+                      date: date ? new Date(date) : new Date(),
+                    },
+                  });
+                }}
+              />
+            </div>
+          </ListItem>
+          <Divider component="li" />
+        </List>
+        <div className={classes.actions}>
+          <Button
+            variant="contained"
+            className={classes.actionBtns}
+            color="primary"
+            disabled={state.data.status !== STATUS.PENDING}
+            onClick={submit}
+          >
+            Submit
+          </Button>
+        </div>
       </Paper>
     </div>
   );

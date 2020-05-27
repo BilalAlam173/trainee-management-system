@@ -13,13 +13,13 @@ import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
 
 import {
-  LeaveRequest,
   LeaveRequestService,
   ShortRequest,
 } from "../../leave-request.service";
 import DateFnsUtils from "@date-io/date-fns";
 import Button from "@material-ui/core/Button";
-let TimePicker = require("react-time-picker");
+// @ts-ignore
+import TimePicker from "react-time-picker";
 
 export function ShortRequestForm(props: any) {
   const { tab } = props;
@@ -28,8 +28,8 @@ export function ShortRequestForm(props: any) {
     trainee: currentUser(),
     ...{
       pno: currentUser()?.pno,
-      startTime: new Date(),
-      endTime: new Date(),
+      startTime: "",
+      endTime: "",
       reason: "",
       date: new Date(),
       address: "",
@@ -115,32 +115,28 @@ export function ShortRequestForm(props: any) {
           </li>
           <Divider component="li" />
           <ListItem>
-            <TextField
-              label="Start Time"
-              multiline
-              value={state.data.startTime.toLocaleTimeString()}
-              className={classes.itemContent}
-              type="number"
-              onChange={(e) =>
+            <p>Start Time</p>
+            <TimePicker
+              value={state.data.startTime}
+              onChange={(time: any) =>
                 setState({
+                  ...state,
                   data: {
                     ...state.data,
-                    startTime: new Date(e.target.value),
+                    startTime: time,
                   },
                 })
               }
             />
-            <TextField
-              label="End Time"
-              multiline
-              value={state.data.endTime.toLocaleTimeString()}
-              className={classes.itemContent}
-              type="number"
-              onChange={(e) =>
+            <p>End Time</p>
+            <TimePicker
+              value={state.data.endTime}
+              onChange={(time: any) =>
                 setState({
+                  ...state,
                   data: {
                     ...state.data,
-                    endTime: new Date(e.target.value),
+                    endTime: time,
                   },
                 })
               }

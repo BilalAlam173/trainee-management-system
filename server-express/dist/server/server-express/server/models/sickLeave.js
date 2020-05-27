@@ -7,9 +7,9 @@ const sickRequestSchema = new mongoose.Schema({
     punishment: Boolean,
     reason: String,
     smoRemarks: String,
-    timeIn: Date,
-    timeout: Date,
-    date: Date,
+    timeIn: { type: String, default: "" },
+    timeout: { type: String, default: "" },
+    date: { type: Date, default: new Date() },
     type: { type: globals_1.REQUEST_TYPE, default: globals_1.REQUEST_TYPE.SICK },
     status: { type: globals_1.STATUS, default: globals_1.STATUS.PENDING },
 }, {
