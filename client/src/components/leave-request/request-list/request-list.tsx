@@ -19,7 +19,11 @@ import {
   ShortRequest,
   SickRequest,
 } from "../leave-request.service";
-import { updateLeaveReq, updateShortReq, updateSickReq } from "../../../services/data.service";
+import {
+  updateLeaveReq,
+  updateShortReq,
+  updateSickReq,
+} from "../../../services/data.service";
 import { LeaveRequest } from "../leave-request.service";
 import { LeaveRequestDoc } from "./leave-request-doc/leave-request-doc";
 import { ShortRequestDoc } from "./short-request-doc/short-request-doc";
@@ -77,6 +81,7 @@ export function LeaveRequestList(props: any) {
 
   const changeHandler = (obj: any) => {
     setData(obj);
+    alert("Form updated with latest changes!");
   };
 
   return (

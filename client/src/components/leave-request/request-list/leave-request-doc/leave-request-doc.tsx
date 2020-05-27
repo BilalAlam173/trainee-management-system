@@ -10,7 +10,12 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import ListItemText from "@material-ui/core/ListItemText";
 import Divider from "@material-ui/core/Divider";
-import { getSecondaryTabText, STATUS, isAdmin } from "../../../../globals";
+import {
+  getSecondaryTabText,
+  STATUS,
+  isAdmin,
+  isTrainee,
+} from "../../../../globals";
 import { requestListStyles } from "../request-list.style";
 import { LeaveRequest } from "../../leave-request.service";
 import Button from "@material-ui/core/Button";
@@ -137,6 +142,7 @@ export function LeaveRequestDoc(props: any) {
                 multiline
                 value={state.data.courseOfficerRemarks}
                 className={classes.itemContent}
+                disabled={isTrainee()}
                 onChange={(e) =>
                   setState({
                     data: {
@@ -151,6 +157,7 @@ export function LeaveRequestDoc(props: any) {
                 multiline
                 value={state.data.jotoRemarks}
                 className={classes.itemContent}
+                disabled={isTrainee()}
                 onChange={(e) =>
                   setState({
                     data: {
@@ -167,6 +174,7 @@ export function LeaveRequestDoc(props: any) {
                 multiline
                 value={state.data.deanRemarks}
                 className={classes.itemContent}
+                disabled={isTrainee()}
                 onChange={(e) =>
                   setState({
                     data: {
@@ -181,6 +189,7 @@ export function LeaveRequestDoc(props: any) {
                 value={state.data.captainRemarks}
                 multiline
                 className={classes.itemContent}
+                disabled={isTrainee()}
                 onChange={(e) =>
                   setState({
                     data: {
@@ -200,7 +209,7 @@ export function LeaveRequestDoc(props: any) {
                 color="primary"
                 disabled={state.data.status !== STATUS.PENDING}
                 onClick={() =>
-                  props.onChange({ ...data, status: STATUS.APPROVED })
+                  props.onChange({ ...state.data, status: STATUS.APPROVED })
                 }
               >
                 Approve
@@ -222,7 +231,7 @@ export function LeaveRequestDoc(props: any) {
                 color="secondary"
                 disabled={state.data.status !== STATUS.PENDING}
                 onClick={() =>
-                  props.onChange({ ...data, status: STATUS.DECLINED })
+                  props.onChange({ ...state.data, status: STATUS.DECLINED })
                 }
               >
                 Decline

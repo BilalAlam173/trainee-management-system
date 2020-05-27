@@ -17,6 +17,7 @@ import Button from "@material-ui/core/Button";
 import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import BlockIcon from "@material-ui/icons/Block";
 import { getTrainee } from "../../../../services/data.service";
+import { isTrainee } from "../../../../globals";
 
 export function SickRequestDoc(props: any) {
   const { data } = props;
@@ -117,14 +118,8 @@ export function SickRequestDoc(props: any) {
             </ListItem>
 
             <ListItem>
-            <ListItemText
-                primary={state.data.date}
-                secondary={"Date"}
-              />
-              <ListItemText
-                primary={state.data.timeIn}
-                secondary={"Time in"}
-              />
+              <ListItemText primary={state.data.date} secondary={"Date"} />
+              <ListItemText primary={state.data.timeIn} secondary={"Time in"} />
               <ListItemText
                 primary={state.data.timeout}
                 secondary={"Time out"}
@@ -147,6 +142,7 @@ export function SickRequestDoc(props: any) {
                 multiline
                 value={state.data.smoRemarks}
                 className={classes.itemContent}
+                disabled={isTrainee()}
                 onChange={(e) =>
                   setState({
                     data: {
@@ -166,7 +162,7 @@ export function SickRequestDoc(props: any) {
                 color="primary"
                 disabled={state.data.status !== STATUS.PENDING}
                 onClick={() =>
-                  props.onChange({ ...data, status: STATUS.APPROVED })
+                  props.onChange({ ...state.data, status: STATUS.APPROVED })
                 }
               >
                 Approve
@@ -176,6 +172,7 @@ export function SickRequestDoc(props: any) {
                 className={classes.actionBtns}
                 color="default"
                 disabled={state.data.status !== STATUS.PENDING}
+                onClick={() => props.onChange(state.data)}
               >
                 save
               </Button>
@@ -185,7 +182,7 @@ export function SickRequestDoc(props: any) {
                 color="secondary"
                 disabled={state.data.status !== STATUS.PENDING}
                 onClick={() =>
-                  props.onChange({ ...data, status: STATUS.DECLINED })
+                  props.onChange({ ...state.data, status: STATUS.DECLINED })
                 }
               >
                 Decline
