@@ -7,8 +7,8 @@ class _traineeService {
             { title: "Name", field: "name" },
             { title: "Rank", field: "rank" },
             { title: "Batch", field: "batch" },
-            { title: "status", field: "status" },
-            { title: "reason", field: "statusReason" },
+            { title: "Status", field: "status" },
+            { title: "Remarks", field: "statusReason" },
         ];
     }
 }
